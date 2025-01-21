@@ -1,0 +1,34 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:             lantern-headless
+# Required-Start:       $local_fs $network $syslog
+# Required-Stop:        $local_fs $network $syslog
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+# Short-Description:    lantern-headless
+# Description:          lantern-headless
+### END INIT INFO
+
+# Directories and details
+control="/usr/bin/lantern-headless"
+case "$1" in
+  start)
+		"${control}" start &
+		echo $! > /var/run/lantern-headless.pid
+	;;
+	stop)
+    kill `cat /var/run/lantern-headless.pid`
+	;;
+	restart)
+    echo "Restarting lantern-headless not supported"
+	;;
+	status)
+	  echo "Status not supported"
+	;;
+	*)
+	echo "Usage: $0 {start|stop|restart|status}"
+	exit 1
+	;;
+esac
+
+exit 0

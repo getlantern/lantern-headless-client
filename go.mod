@@ -1,6 +1,6 @@
 module github.com/getlantern/lantern-headless-client
 
-go 1.22.8
+go 1.22.4
 
 require (
 	github.com/BurntSushi/toml v1.2.1
@@ -245,4 +245,4 @@ require (
 
 replace github.com/tetratelabs/wazero => github.com/refraction-networking/wazero v1.7.1-w
 
-replace github.com/getlantern/flashlight/v7 => ../flashlight
+//replace github.com/getlantern/flashlight/v7 => ../flashlight
