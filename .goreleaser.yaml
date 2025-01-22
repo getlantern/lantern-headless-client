@@ -104,3 +104,4 @@ aurs:
         Lantern Headless Client
       license: "GPL"
       git_url: "ssh://aur@aur.archlinux.org/lantern-headless-bin.git"
+      private_key: "{{ .Env.AUR_KEY }}"
