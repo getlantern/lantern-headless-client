@@ -96,7 +96,7 @@ dockers:
       - getlantern/lantern-headless
 aurs:
     -
-      name: lantern-headless
+      name: lantern-headless-bin
       homepage: "https://github.com/getlantern/lantern-headless-client"
       maintainers:
         - "Lantern Team <dev@getlantern.org>"
