@@ -39,10 +39,6 @@ dmg:
     name: "lantern-headless-{{.Arch}}"
     replace: true
 
-dockers:
-  - image_templates:
-      - getlantern/lantern-headless
-
 msi:
   -
     id: lantern-headless
@@ -93,3 +89,17 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+
+dockers:
+  - image_templates:
+      - getlantern/lantern-headless
+aurs:
+    -
+      name: lantern-headless
+      homepage: "https://github.com/getlantern/lantern-headless-client"
+      maintainers:
+        - "Lantern Team <dev@getlantern.org>"
+      description: |
+        Lantern Headless Client
+      license: "GPL"
+      git_url: "ssh://aur@aur.archlinux.org/lantern-headless-bin.git"
