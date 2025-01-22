@@ -6,12 +6,12 @@ builds:
 
     goos:
       - linux
-      - windows
-      - darwin
+      #- windows
+      #- darwin
     goarch:
       - amd64
-      - mips64
-      - arm64
+      #- mips64
+      #- arm64
       #- armv6
       #- armv7
 
@@ -32,6 +32,10 @@ archives:
     format_overrides:
       - goos: windows
         formats: ['zip']
+    files:
+      - LICENSE
+      - README.md
+      - src: ./scripts/lantern-headless.service
 
 dmg:
   -
@@ -105,3 +109,6 @@ aurs:
       license: "GPL"
       git_url: "ssh://aur@aur.archlinux.org/lantern-headless-bin.git"
       private_key: "{{ .Env.AUR_KEY }}"
+      package: |
+        install -Dm755 "./lantern-headless" "${pkgdir}/usr/bin/lantern-headless"
+        install -Dm644 "./scripts/lantern-headless.service" "${pkgdir}/usr/lib/systemd/system/lantern-headless.service"
