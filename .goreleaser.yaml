@@ -6,12 +6,12 @@ builds:
 
     goos:
       - linux
-      #- windows
-      #- darwin
+      - windows
+      - darwin
     goarch:
       - amd64
-      #- mips64
-      #- arm64
+      - mips64
+      - arm64
       #- armv6
       #- armv7
 
