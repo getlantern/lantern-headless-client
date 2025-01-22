@@ -6,7 +6,7 @@ require (
 	github.com/BurntSushi/toml v1.2.1
 	github.com/alexflint/go-arg v1.4.3
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
-	github.com/getlantern/flashlight/v7 v7.6.175
+	github.com/getlantern/flashlight/v7 v7.6.179
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/google/uuid v1.4.0
 	github.com/stretchr/testify v1.10.0

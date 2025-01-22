@@ -11,6 +11,9 @@ BIN_NAME = "lantern-headless-$(ARCH)-$(PLATFORM)"
 
 REVISION_DATE := $(shell git log -1 --pretty=format:%ad --date=format:%Y%m%d.%H%M%S)
 BUILD_DATE := $(shell date -u +%Y%m%d.%H%M%S)
+UID := $(shell id -u)
+GID := $(shell id -g)
+
 LDFLAGS := -s -w -X github.com/getlantern/lantern-headless-client/main.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/lantern-headless-client/main.BuildDate=$(BUILD_DATE) -X github.com/getlantern/lantern-headless-client/main.CompileTimePackageVersion=$(VERSION)
 
 # Ensure we have nfpm installed. If not install using go install
@@ -40,22 +43,6 @@ check-env:
 		exit 1; \
 	fi
 
-package-pacman: nfpm build
-	nfpm package -p archlinux --target ./build/
-
-package-deb: nfpm build
-	nfpm package -p deb --target ./build/
-
-package-rpm: nfpm build
-	nfpm package -p rpm --target ./build/
-
-package-ipk: nfpm build
-	nfpm package -p ipk --target ./build/
-
-package-apk: nfpm build
-	nfpm package -p apk --target ./build/
-
-package: package-pacman package-deb package-rpm package-ipk package-apk
 
 # Actually Build the application (called inside the build container)
 build-internal: export GOPRIVATE = github.com/getlantern
@@ -65,18 +52,16 @@ build-internal: check-env
 	@apt install git-lfs
 	@git lfs install
 	go build -ldflags="$(LDFLAGS)" -buildvcs=false -o ./build/$(BIN_NAME) .
-	chmod a+rw ./build/$(BIN_NAME)
+	chown $(TARGET_UID):$(TARGET_GID) ./build/$(BIN_NAME)
 
 clean:
 	@echo "Cleaning up"
 	rm -f build/*
 
 # Build the application using build container
-build: check-env clean
+build: check-env
 	@echo "Building for $(PLATFORM)/$(ARCH) version $(VERSION) using $(IMAGE)"
-	docker run -it --rm \
-        -v .:/src \
-        -w /src \
+	docker run -it --rm -v .:/src -w /src -e TARGET_UID=$(UID) -e TARGET_GID=$(GID) \
         $(IMAGE) \
         --build-cmd "make VERSION=$(VERSION) PLATFORM=$(PLATFORM) ARCH=$(ARCH) IMAGE=$(IMAGE) build-internal" \
         -p $(PLATFORM)/$(ARCH)

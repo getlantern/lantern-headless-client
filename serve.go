@@ -40,8 +40,8 @@ func serve(cmd *ServeCmd) {
 	slog.Info("Starting Lantern...", "log", logFilePath)
 	fc, err := flashlight.New(
 		"lantern-headless",
-		"999.999.999",
-		"10-10-2024",
+		ApplicationVersion,
+		RevisionDate,
 		args.DataPath,
 		false,
 		func() bool { return false },
