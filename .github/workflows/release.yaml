@@ -82,3 +82,4 @@ jobs:
           AUR_KEY: ${{ secrets.AUR_KEY }}
           COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          FURY_TOKEN: ${{ secrets.FURY_TOKEN }}
