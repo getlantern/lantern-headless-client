@@ -37,8 +37,6 @@ builds:
     binary: lantern-headless
 universal_binaries:
   - replace: true
-    ids:
-      - lantern-headless
 archives:
   - formats: ['tar.gz']
     # use zip for windows archives
@@ -58,13 +56,11 @@ notarize:
 
 dmg:
   -
-    id: lantern-headless
     name: "lantern-headless-{{.Arch}}"
     replace: true
 
 msi:
   -
-    id: lantern-headless
     name: "lantern-headless-{{.MsiArch}}"
     replace: true
     wxs: ./scripts/setup.wsx
@@ -118,8 +114,6 @@ release:
 
 furies:
   - account: getlantern
-    ids:
-      - lantern-headless
     formats:
       - deb
       - rpm
