@@ -33,6 +33,12 @@ yum install lantern-headless
 yay -S lantern-headless-bin
 ```
 
+### Alipne Linux
+```shell
+echo "https://alpine.fury.io/getlantern/" >> /etc/apk/repositories
+apk add lantern-headless
+```
+
 ### Docker
 
 
