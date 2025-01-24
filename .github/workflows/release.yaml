@@ -48,6 +48,7 @@ jobs:
           name: lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
           path: build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
           if-no-files-found: 'error'
+          retention-days: 1
   release:
     needs: build
     runs-on:
@@ -65,17 +66,18 @@ jobs:
       - name: Setup dependencies
         run: |
             curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64"
-            sudo mv cosign-linux-amd64 /usr/local/bin/cosign
-            sudo chmod +x /usr/local/bin/cosign
-            sudo apt-get update
-            sudo apt-get install -y msitools genisoimage wixl
+            mv cosign-linux-amd64 /usr/local/bin/cosign
+            chmod +x /usr/local/bin/cosign
+            curl -sSfL https://raw.githubusercontent.com/anchore/quill/main/install.sh | sh -s -- -b /usr/local/bin
+            apt-get update
+            apt-get install -y msitools genisoimage wixl
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser-pro
           version: "~> 2"
-          args: release --clean
+          args: release --clean --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}

@@ -49,7 +49,12 @@ archives:
       - LICENSE
       - README.md
       - src: ./scripts/lantern-headless.service
-
+notarize:
+  macos:
+    -
+      sign:
+        certificate: "{{.Env.MACOS_SIGN_P12}}"
+        password: "{{.Env.MACOS_SIGN_PASSWORD}}"
 dmg:
   -
     id: lantern-headless
@@ -123,6 +128,7 @@ dockerhub:
     images:
       - getlantern/lantern-headless
     username: getlantern
+    secret_name: DOCKER_PASSWORD
     full_description:
       from_file:
         path: ./README.md
