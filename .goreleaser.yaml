@@ -1,0 +1,143 @@
+version: 2
+project_name: lantern-headless
+signs:
+  - cmd: cosign
+    stdin: ""
+    args:
+      - "sign-blob"
+      - "--key=env://COSIGN_KEY"
+      - "--output-signature=${signature}"
+      - "${artifact}"
+      - "--yes"
+    artifacts: all
+builds:
+  - # Set the builder to prebuilt
+    builder: prebuilt
+
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - mips64
+      - arm64
+      - "386"
+      #- armv6
+      #- armv7
+
+    ignore:
+      - goos: windows
+        goarch: arm64
+      - goos: linux
+        goarch: "386"
+    prebuilt:
+      path: build/lantern-headless-{{ .Arch }}-{{ .Os }}
+
+    binary: lantern-headless
+universal_binaries:
+  - replace: true
+    ids:
+      - lantern-headless
+archives:
+  - formats: ['tar.gz']
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        formats: ['zip']
+    files:
+      - LICENSE
+      - README.md
+      - src: ./scripts/lantern-headless.service
+
+dmg:
+  -
+    id: lantern-headless
+    name: "lantern-headless-{{.Arch}}"
+    replace: true
+
+msi:
+  -
+    id: lantern-headless
+    name: "lantern-headless-{{.MsiArch}}"
+    replace: true
+    wxs: ./scripts/setup.wsx
+
+nfpms:
+  -
+    package_name: "lantern-headless"
+    formats:
+      - apk
+      - deb
+      - rpm
+      - ipk
+      - archlinux
+    section: "default"
+    maintainer: "Lantern Team <dev@getlantern.org>"
+    description: |
+      Lantern Headless Client
+    vendor: "Brave New Software"
+    homepage: "https://github.com/getlantern/lantern-headless-client"
+    license: "GPL"
+    contents:
+      - src: ./scripts/lantern-headless.service
+        dst: /etc/lantern-headless/lantern-headless.service
+        file_info:
+          mode: 0600
+          owner: root
+          group: root
+      - src: ./scripts/lantern-headless.sysvinit
+        dst: /etc/lantern-headless/lantern-headless.sysvinit
+        file_info:
+          mode: 0700
+          owner: root
+          group: root
+    scripts:
+      postinstall: ./scripts/postinstall
+      preremove: ./scripts/preremove
+      preinstall: ./scripts/preinstall
+    archlinux:
+      packager: Lantern Team <dev@getlantern.org>
+      scripts:
+        postupgrade: ./scripts/postinstall
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+release:
+  replace_existing_artifacts: true
+
+furies:
+  - account: getlantern
+    ids:
+      - lantern-headless
+    formats:
+      - deb
+      - rpm
+
+dockerhub:
+  -
+    images:
+      - getlantern/lantern-headless
+    username: getlantern
+    full_description:
+      from_file:
+        path: ./README.md
+
+aurs:
+    -
+      name: lantern-headless-bin
+      homepage: "https://github.com/getlantern/lantern-headless-client"
+      maintainers:
+        - "Lantern Team <dev@getlantern.org>"
+      description: |
+        Lantern Headless Client
+      license: "GPL"
+      git_url: "ssh://aur@aur.archlinux.org/lantern-headless-bin.git"
+      private_key: "{{ .Env.AUR_KEY }}"
+      package: |
+        install -Dm755 "./lantern-headless" "${pkgdir}/usr/bin/lantern-headless"
+        install -Dm644 "./scripts/lantern-headless.service" "${pkgdir}/usr/lib/systemd/user/lantern-headless.service"

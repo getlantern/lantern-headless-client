@@ -1,0 +1,84 @@
+on:
+    push:
+      tags:
+        - "v*"
+
+permissions:
+  contents: write
+  id-token: "write"
+
+jobs:
+  build:
+    runs-on:
+      group: large-runners
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: arm64
+            image: arm-debian11
+          - goos: linux
+            goarch: amd64
+            image: main-debian11
+          - goos: linux
+            goarch: mips64
+            image: mips-debian11
+          - goos: windows
+            goarch: 386
+            image: main-debian11
+          - goos: windows
+            goarch: amd64
+            image: main-debian11
+          - goos: darwin
+            goarch: arm64
+            image: darwin-arm64-debian11
+          - goos: darwin
+            goarch: amd64
+            image: darwin-debian11
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Mandatory to use the extract version from tag
+      - name: Build ${{ matrix.goos }} ${{ matrix.goarch }}
+        run: make ARCH=${{ matrix.goarch }} PLATFORM=${{ matrix.goos }} IMAGE=docker.elastic.co/beats-dev/golang-crossbuild:1.22.4-${{ matrix.image }} build
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
+          path: build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
+          if-no-files-found: 'error'
+  release:
+    needs: build
+    runs-on:
+      group: large-runners
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Mandatory to use the extract version from tag
+      - name: Download production artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: build
+          merge-multiple: true
+      - name: Setup dependencies
+        run: |
+            curl -O -L "https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64"
+            sudo mv cosign-linux-amd64 /usr/local/bin/cosign
+            sudo chmod +x /usr/local/bin/cosign
+            sudo apt-get update
+            sudo apt-get install -y msitools genisoimage wixl
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser-pro
+          version: "~> 2"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+          AUR_KEY: ${{ secrets.AUR_KEY }}
+          COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
