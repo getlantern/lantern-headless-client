@@ -69,8 +69,8 @@ jobs:
             mv cosign-linux-amd64 /usr/local/bin/cosign
             chmod +x /usr/local/bin/cosign
             curl -sSfL https://raw.githubusercontent.com/anchore/quill/main/install.sh | sh -s -- -b /usr/local/bin
-            apt-get update
-            apt-get install -y msitools genisoimage wixl
+            sudo apt-get update
+            sudo apt-get install -y msitools genisoimage wixl
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
