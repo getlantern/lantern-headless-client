@@ -10,18 +10,55 @@ It's targeted at advanced users who are comfortable with the command line.
 > You can validate the signature by running `cosign verify-blob -key cosign.pub -signature release_file.tar.gz.sig release_file.tar.gz`.
 > The public key is available [here](./cosign.pub).
 
-> TBD: how to install the binary
-> 
-> TBD: how to install from source
-> 
-> TBD: how to install as a service
-> 
-> TBD: how to install as a docker container
-> 
-> TBD: how to install as from repo
+### From binary
+
+Download the latest release from the [releases page](https://github.com/getlantern/lantern-headless-client/releases/latest).
+Extract the tarball and run the binary.
+
+### Debian/Ubuntu
+```shell
+echo "deb [trusted=yes] https://apt.fury.io/getlantern/ /" > /etc/apt/sources.list.d/fury.list
+apt-get update
+apt-get install lantern-headless
+```
+
+### RedHat/CentOS
+```shell
+echo -e "[fury]\nname=Gemfury Private Repo\nbaseurl=https://yum.fury.io/getlantern/\nenabled=1\ngpgcheck=0" > /etc/yum.repos.d/fury.repo
+yum install lantern-headless
+```
+
+### Arch Linux
+```
+yay -S lantern-headless-bin
+```
+
+### Docker
+
+
+```shell
+docker run --name=lantern-headless \
+  --volume=./lantern-data/:/data/ \
+  --workdir=/ \
+  -p 12345:12345 \ 
+  -p 12346:12346 \
+  --restart=always \
+  --runtime=runc \
+  --detach=true \ 
+  getlantern/lantern-headless  \
+  --data-path /data start --http-proxy-addr 0.0.0.0:12345 --socks-proxy-addr 0.0.0.0:12346
+```
+
+### Scoop
+
+Coming soon
+
+### Homebrew
+
+Coming soon
+
 
 ## Usage
-
 `lantern-headless-client --help` will show you the available options.
 
 ```shell
