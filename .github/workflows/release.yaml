@@ -89,3 +89,5 @@ jobs:
           COSIGN_KEY: ${{ secrets.COSIGN_KEY }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           FURY_TOKEN: ${{ secrets.FURY_TOKEN }}
+          MACOS_SIGN_P12: ${{ secrets.MACOS_SIGN_P12 }}
+          MACOS_SIGN_PASSWORD: ${{ secrets.MACOS_SIGN_PASSWORD }}
