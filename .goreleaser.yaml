@@ -51,10 +51,11 @@ archives:
       - src: ./scripts/lantern-headless.service
 notarize:
   macos:
-    -
+    - enabled: true
       sign:
         certificate: "{{.Env.MACOS_SIGN_P12}}"
         password: "{{.Env.MACOS_SIGN_PASSWORD}}"
+
 dmg:
   -
     id: lantern-headless
@@ -122,6 +123,12 @@ furies:
     formats:
       - deb
       - rpm
+
+dockers:
+  -
+    image_templates:
+      - "getlantern/lantern-headless:latest"
+      - "getlantern/lantern-headless:{{ .Tag }}"
 
 dockerhub:
   -
