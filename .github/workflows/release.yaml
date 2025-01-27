@@ -42,6 +42,21 @@ jobs:
           fetch-depth: 0 # Mandatory to use the extract version from tag
       - name: Build ${{ matrix.goos }} ${{ matrix.goarch }}
         run: make ARCH=${{ matrix.goarch }} PLATFORM=${{ matrix.goos }} IMAGE=docker.elastic.co/beats-dev/golang-crossbuild:1.22.4-${{ matrix.image }} build
+      - name: Sign EXE with Azure Code Signing (windows only)
+        if: matrix.goos == 'windows'
+        uses: getlantern/trusted-signing-action@main
+        with:
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          endpoint: https://wus2.codesigning.azure.net/
+          code-signing-account-name: code-signing
+          certificate-profile-name: Lantern
+          files-folder: ${{ github.workspace }}\build
+          files-folder-filter: exe
+          file-digest: SHA256
+          timestamp-rfc3161: http://timestamp.acs.microsoft.com
+          timestamp-digest: SHA256
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
