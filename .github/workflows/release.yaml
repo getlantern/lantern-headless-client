@@ -41,7 +41,9 @@ jobs:
         with:
           fetch-depth: 0 # Mandatory to use the extract version from tag
       - name: Build ${{ matrix.goos }} ${{ matrix.goarch }}
-        run: make ARCH=${{ matrix.goarch }} PLATFORM=${{ matrix.goos }} IMAGE=docker.elastic.co/beats-dev/golang-crossbuild:1.22.4-${{ matrix.image }} build
+        run: |
+          make ARCH=${{ matrix.goarch }} PLATFORM=${{ matrix.goos }} IMAGE=docker.elastic.co/beats-dev/golang-crossbuild:1.22.4-${{ matrix.image }} build
+          mv build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }} build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}.exe
       - name: Sign files with Trusted Signing
         if: matrix.goos == 'windows'
         uses: azure/trusted-signing-action@v0.5.1
@@ -52,7 +54,8 @@ jobs:
           endpoint: https://eus.codesigning.azure.net/
           trusted-signing-account-name: code-signing
           certificate-profile-name: Lantern
-          files: ${{ github.workspace }}\build\lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
+          files: ${{ github.workspace }}/build
+          files-folder-filter: exe
           file-digest: SHA256
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
@@ -60,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
-          path: build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
+          path: build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}.exe
           if-no-files-found: 'error'
           retention-days: 1
   release:
