@@ -14,27 +14,27 @@ jobs:
     strategy:
       matrix:
         include:
-          - goos: linux
-            goarch: arm64
-            image: arm-debian11
-          - goos: linux
-            goarch: amd64
-            image: main-debian11
-          - goos: linux
-            goarch: mips64
-            image: mips-debian11
+#          - goos: linux
+#            goarch: arm64
+#            image: arm-debian11
+#          - goos: linux
+#            goarch: amd64
+#            image: main-debian11
+#          - goos: linux
+#            goarch: mips64
+#            image: mips-debian11
+#          - goos: windows
+#            goarch: 386
+#            image: main-debian11
           - goos: windows
-            goarch: 386
-            image: main-debian11
-          - goos: windows
             goarch: amd64
-            image: main-debian11
-          - goos: darwin
-            goarch: arm64
-            image: darwin-arm64-debian11
-          - goos: darwin
-            goarch: amd64
-            image: darwin-debian11
+#            image: main-debian11
+#          - goos: darwin
+#            goarch: arm64
+#            image: darwin-arm64-debian11
+#          - goos: darwin
+#            goarch: amd64
+#            image: darwin-debian11
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -54,11 +54,15 @@ jobs:
           endpoint: https://eus.codesigning.azure.net/
           trusted-signing-account-name: code-signing
           certificate-profile-name: Lantern
-          files: ${{ github.workspace }}/build
+          files: ${{ github.workspace }}\build
           files-folder-filter: exe
           file-digest: SHA256
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+        with:
+          limit-access-to-users: reflog
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
