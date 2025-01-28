@@ -43,7 +43,24 @@ jobs:
       - name: Build ${{ matrix.goos }} ${{ matrix.goarch }}
         run: |
           make ARCH=${{ matrix.goarch }} PLATFORM=${{ matrix.goos }} IMAGE=docker.elastic.co/beats-dev/golang-crossbuild:1.22.4-${{ matrix.image }} build
-          mv build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }} build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}.exe
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
+          path: build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
+          if-no-files-found: 'error'
+          retention-days: 1
+
+  sign:
+    runs-on: windows-latest
+    needs: build
+    if: matrix.goos == 'windows'
+    steps:
+      - name: Download production artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: build
+          name: lantern-headless-${{ matrix.goarch }}-windows
       - name: Sign files with Trusted Signing
         if: matrix.goos == 'windows'
         uses: azure/trusted-signing-action@v0.5.1
@@ -54,25 +71,22 @@ jobs:
           endpoint: https://eus.codesigning.azure.net/
           trusted-signing-account-name: code-signing
           certificate-profile-name: Lantern
-          files: ${{ github.workspace }}\build
-          files-folder-filter: exe
+          files: ${{ github.workspace }}\build\lantern-headless-${{ matrix.goarch }}-windows
           file-digest: SHA256
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-        if: ${{ failure() }}
-        with:
-          limit-access-to-users: reflog
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
           name: lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
-          path: build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}.exe
+          path: build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
+          overwrite: true
           if-no-files-found: 'error'
           retention-days: 1
+
+
   release:
-    needs: build
+    needs: sign
     runs-on:
       group: large-runners
     steps:
