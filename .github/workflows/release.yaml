@@ -61,6 +61,7 @@ jobs:
           timestamp-digest: SHA256
       - name: Setup upterm session
         uses: lhotari/action-upterm@v1
+        if: ${{ failure() }}
         with:
           limit-access-to-users: reflog
       - name: Archive production artifacts
