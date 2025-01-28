@@ -54,15 +54,14 @@ jobs:
   sign:
     runs-on: windows-latest
     needs: build
-    if: matrix.goos == 'windows'
     steps:
       - name: Download production artifacts
         uses: actions/download-artifact@v4
         with:
           path: build
-          name: lantern-headless-${{ matrix.goarch }}-windows
+          name: "lantern-headless-*-windows"
+          merge-multiple: true
       - name: Sign files with Trusted Signing
-        if: matrix.goos == 'windows'
         uses: azure/trusted-signing-action@v0.5.1
         with:
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -71,15 +70,23 @@ jobs:
           endpoint: https://eus.codesigning.azure.net/
           trusted-signing-account-name: code-signing
           certificate-profile-name: Lantern
-          files: ${{ github.workspace }}\build\lantern-headless-${{ matrix.goarch }}-windows
+          files: ${{ github.workspace }}\build\lantern-headless-amd64-windows, ${{ github.workspace }}\build\lantern-headless-386-windows
           file-digest: SHA256
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
-          path: build/lantern-headless-${{ matrix.goarch }}-${{ matrix.goos }}
+          name: lantern-headless-amd64-windows
+          path: build/lantern-headless-amd64-windows
+          overwrite: true
+          if-no-files-found: 'error'
+          retention-days: 1
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lantern-headless-386-windows
+          path: build/lantern-headless-386-windows
           overwrite: true
           if-no-files-found: 'error'
           retention-days: 1
