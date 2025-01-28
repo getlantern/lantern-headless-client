@@ -14,27 +14,27 @@ jobs:
     strategy:
       matrix:
         include:
-#          - goos: linux
-#            goarch: arm64
-#            image: arm-debian11
-#          - goos: linux
-#            goarch: amd64
-#            image: main-debian11
-#          - goos: linux
-#            goarch: mips64
-#            image: mips-debian11
+          - goos: linux
+            goarch: arm64
+            image: arm-debian11
+          - goos: linux
+            goarch: amd64
+            image: main-debian11
+          - goos: linux
+            goarch: mips64
+            image: mips-debian11
           - goos: windows
             goarch: 386
             image: main-debian11
           - goos: windows
             goarch: amd64
             image: main-debian11
-#          - goos: darwin
-#            goarch: arm64
-#            image: darwin-arm64-debian11
-#          - goos: darwin
-#            goarch: amd64
-#            image: darwin-debian11
+          - goos: darwin
+            goarch: arm64
+            image: darwin-arm64-debian11
+          - goos: darwin
+            goarch: amd64
+            image: darwin-debian11
     steps:
       - name: Checkout
         uses: actions/checkout@v4
