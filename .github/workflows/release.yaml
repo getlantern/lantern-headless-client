@@ -28,7 +28,7 @@ jobs:
 #            image: main-debian11
           - goos: windows
             goarch: amd64
-#            image: main-debian11
+            image: main-debian11
 #          - goos: darwin
 #            goarch: arm64
 #            image: darwin-arm64-debian11
