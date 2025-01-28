@@ -23,9 +23,9 @@ jobs:
 #          - goos: linux
 #            goarch: mips64
 #            image: mips-debian11
-#          - goos: windows
-#            goarch: 386
-#            image: main-debian11
+          - goos: windows
+            goarch: 386
+            image: main-debian11
           - goos: windows
             goarch: amd64
             image: main-debian11
@@ -61,16 +61,17 @@ jobs:
           path: build
           pattern: "lantern-headless-*-windows"
           merge-multiple: true
-      - name: Sign files with Trusted Signing
-        uses: azure/trusted-signing-action@v0.5.1
+
+      - name: Sign EXE with Azure Code Signing
+        uses: getlantern/trusted-signing-action@main
         with:
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
           azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          endpoint: https://eus.codesigning.azure.net/
-          trusted-signing-account-name: code-signing
+          endpoint: https://wus2.codesigning.azure.net/
+          code-signing-account-name: code-signing
           certificate-profile-name: Lantern
-          files: ${{ github.workspace }}\build\lantern-headless-amd64-windows, ${{ github.workspace }}\build\lantern-headless-386-windows
+          files-folder: ${{ github.workspace }}\build
           file-digest: SHA256
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
