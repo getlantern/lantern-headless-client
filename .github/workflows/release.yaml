@@ -59,7 +59,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: build
-          name: "lantern-headless-*-windows"
+          pattern: "lantern-headless-*-windows"
           merge-multiple: true
       - name: Sign files with Trusted Signing
         uses: azure/trusted-signing-action@v0.5.1
