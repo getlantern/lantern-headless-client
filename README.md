@@ -1,7 +1,7 @@
 # Lantern Headless Client
 
 This is a headless client for Lantern, which is a peer-to-peer censorship circumvention tool. 
-It is designed to be run on a server/nas/router, and to be used by a client running on a user's computer.
+It is designed to be run on a server/nas/router and to be used by a client running on a user's computer.
 It's targeted at advanced users who are comfortable with the command line.
 
 ## Installation
@@ -73,10 +73,13 @@ Usage: lantern-headless-client [--data-path DATA-PATH] [--log-level LOG-LEVEL] [
 Options:
   --data-path DATA-PATH
                          Path to store data (config, logs, etc)
-  --log-level LOG-LEVEL
-                         Minimum log level to output. Value should be DEBUG, INFO, WARN, or ERROR. [default: INFO, env: LOG_LEVEL]
-  --json                 Output logs in JSON format
+  --debug                Enable debug mode
+  --raw                  Output logs in raw format
+  --quiet                Disable all output
+  --auth-url AUTH-URL    Override URL of the authentication server
+  --insecure             Whether to skip TLS verification
   --help, -h             display this help and exit
+  --version              display version and exit
 
 Commands:
   auth                   Authenticate with Lantern
@@ -85,16 +88,32 @@ Commands:
 
 ## Authentication
 
-> TBD: how to get the auth token and uid from GUI app
+> The application can be used without authentication, but it will be limited to a certain amount of data transfer.
 
 To use the PRO version of Lantern, you need to authenticate with Lantern's servers.
-You can do this by running `lantern-headless-client auth` and supplying the auth token and uid you got from the GUI app.
+This needs to be done once, and the auth token will be stored in the data directory.
+The arguments can be passed via the command line, environment variables or entered interactively.
+
+> Please note that there is no way to pay for PRO account via the headless client. You need to use the desktop/mobile Lantern client for that.
+
+
+### Sign up
 
 ```shell
-$ lantern-headless-client auth --user-id [uid] --token [token]
+$ lantern-headless-client auth signup --email <email> 
 ```
 
-This will store the auth token and uid in the data directory, so you only need to do this once.
+### Login
+
+```shell
+$ lantern-headless-client auth login --email <email> 
+```
+
+### Logout
+
+```shell
+$ lantern-headless-client auth logout
+```
 
 ## Starting Lantern
 
@@ -118,24 +137,4 @@ Options:
                          Address to bind to and use for SOCKS the proxy. Defaults to a random port on localhost [default: 127.0.0.1:0]
   --sticky-config        Whether to use a sticky config
   --readable-config      Whether to use a readable config
-  --proxies-yaml PROXIES-YAML
-                         Path to a custom proxies.yaml file. Assumes --sticky-config
-  --device-id DEVICE-ID
-                         Custom Device ID
-
-Global options:
-  --data-path DATA-PATH
-                         Path to store data (config, logs, etc)
-  --log-level LOG-LEVEL
-                         Minimum log level to output. Value should be DEBUG, INFO, WARN, or ERROR. [default: INFO, env: LOG_LEVEL]
-  --json                 Output logs in JSON format
-  --help, -h             display this help and exit
-```
-
-### Using custom proxies
-
-Instead of using Lantern's default proxies, you can supply your own proxies.yaml file.
-
-```shell
-$ lantern-headless-client start --proxies-yaml /path/to/proxies.yaml
 ```

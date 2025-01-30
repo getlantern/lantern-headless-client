@@ -56,6 +56,11 @@ build: check-env
         --build-cmd "make VERSION=$(VERSION) PLATFORM=$(PLATFORM) ARCH=$(ARCH) IMAGE=$(IMAGE) build-internal" \
         -p $(PLATFORM)/$(ARCH)
 
+proto:
+	go install github.com/bufbuild/buf/cmd/buf@latest
+	cd ./auth && buf generate
+
+
 
 # Show help
 help:

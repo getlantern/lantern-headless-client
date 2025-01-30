@@ -4,7 +4,7 @@
 package deviceid
 
 import (
-	"log/slog"
+	"github.com/pterm/pterm"
 	"os"
 	"path/filepath"
 
@@ -19,23 +19,23 @@ func Get() string {
 	path := filepath.Join(appdir.InHomeDir(".lanternsecrets"))
 	err := os.Mkdir(path, 0755)
 	if err != nil && !os.IsExist(err) {
-		slog.Error("Unable to create folder to store deviceID, defaulting to old-style device ID", "error", err)
+		pterm.Error.Printfln("Unable to create folder to store deviceID, defaulting to old-style device ID, error: %s", err.Error())
 		return OldStyleDeviceID()
 	}
 
 	filename := filepath.Join(path, ".deviceid")
 	existing, err := os.ReadFile(filename)
 	if err != nil {
-		slog.Debug("Storing new deviceID")
+		pterm.Debug.Println("Storing new deviceID")
 		_deviceID, err := uuid.NewRandom()
 		if err != nil {
-			slog.Error("Error generating new deviceID, defaulting to old-style device ID", "error", err)
+			pterm.Error.Printfln("Error generating new deviceID, defaulting to old-style device ID, error: %s", err.Error())
 			return OldStyleDeviceID()
 		}
 		deviceID := _deviceID.String()
 		err = os.WriteFile(filename, []byte(deviceID), 0644)
 		if err != nil {
-			slog.Error("Error storing new deviceID, defaulting to old-style device ID", "error", err)
+			pterm.Error.Printfln("Error storing new deviceID, defaulting to old-style device ID, error: %s", err.Error())
 			return OldStyleDeviceID()
 		}
 		return deviceID

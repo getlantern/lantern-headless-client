@@ -1,30 +1,45 @@
 package main
 
 import (
-	"log/slog"
+	"context"
+	"fmt"
+	"github.com/getlantern/golog"
+	"github.com/pterm/pterm"
+	"gopkg.in/natefinch/lumberjack.v2"
+	"io"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/alexflint/go-arg"
 	"github.com/getlantern/appdir"
 )
 
-func setupLogging() {
-	opts := &slog.HandlerOptions{
-		Level: args.LogLevel,
+func setupOutput() {
+	if args.Debug {
+		pterm.EnableDebugMessages()
 	}
-	var handler slog.Handler
-	if args.JSON {
-		handler = slog.NewJSONHandler(os.Stdout, opts)
-	} else {
-		handler = slog.NewTextHandler(os.Stdout, opts)
+	if args.Quiet {
+		pterm.DisableDebugMessages()
 	}
-
-	logger := slog.New(handler)
-	slog.SetDefault(logger)
+	if args.Raw {
+		pterm.DisableColor()
+	}
 }
 
-var configFilePath, logFilePath string
+func setupLog() *lumberjack.Logger {
+	logWriter := &lumberjack.Logger{
+		Filename:   logFilePath,
+		MaxSize:    10, // megabytes
+		MaxBackups: 5,
+	}
+
+	golog.SetOutputs(logWriter, logWriter)
+	golog.SetPrepender(func(writer io.Writer) {
+		_, _ = writer.Write([]byte(fmt.Sprintf("%s: ", time.Now().Format("2006-01-02 15:04:05"))))
+	})
+	return logWriter
+}
 
 func setupDataFolder() {
 	if args.DataPath == "" {
@@ -32,7 +47,7 @@ func setupDataFolder() {
 	}
 
 	if err := os.Mkdir(args.DataPath, 0755); err != nil && !os.IsExist(err) {
-		slog.Error("Unable to create folder to store data, defaulting to current directory", "error", err)
+		pterm.Error.Printfln("Unable to create folder to store data, defaulting to current directory. Error: %s", err.Error())
 		args.DataPath = "."
 	}
 	configFilePath = filepath.Join(args.DataPath, "config.toml")
@@ -41,17 +56,22 @@ func setupDataFolder() {
 
 func main() {
 	argParser := arg.MustParse(&args)
-	setupLogging()
+	setupOutput()
 	setupDataFolder()
+	logWriter := setupLog()
+	defer func(logWriter *lumberjack.Logger) {
+		_ = logWriter.Close()
+	}(logWriter)
+	ctx := context.Background()
 	switch {
 	case args.Auth != nil:
-		auth(args.Auth)
+		authCmd(ctx, args.Auth, args.AuthURL, logWriter)
 		break
 	case args.Serve != nil:
 		readAuth()
 		serve(args.Serve)
 		break
 	default:
-		argParser.WriteHelp(os.Stdout)
+		argParser.WriteHelp(pterm.DefaultLogger.Writer)
 	}
 }
