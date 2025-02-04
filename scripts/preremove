@@ -4,17 +4,18 @@ service_name="lantern-headless"
 service_unit="lantern-headless.service"
 sysvinit_script="lantern-headless.sysvinit"
 sysvinit_dir="/etc/init.d/"
+
 error(){
-    echo -e "\e[91m`date "+%Y-%m-%d %H:%M:%S.%3N"`\t[ERRO]\t$1\e[0m"
+    echo -e "\e[91m$(date "+%Y-%m-%d %H:%M:%S.%3N")\t[ERRO]\t$1\e[0m"
 }
 warn(){
-    echo -e "\e[93m`date "+%Y-%m-%d %H:%M:%S.%3N"`\t[WARN]\t$1\e[0m"
+    echo -e "\e[93m$(date "+%Y-%m-%d %H:%M:%S.%3N")\t[WARN]\t$1\e[0m"
 }
 info(){
-    echo -e "\e[96m`date "+%Y-%m-%d %H:%M:%S.%3N"`\t[INFO]\t$1\e[0m"
+    echo -e "\e[96m$(date "+%Y-%m-%d %H:%M:%S.%3N")\t[INFO]\t$1\e[0m"
 }
 succ(){
-    echo -e "\e[92m`date "+%Y-%m-%d %H:%M:%S.%3N"`\t[SUCC]\t$1\e[0m"
+    echo -e "\e[92m$(date "+%Y-%m-%d %H:%M:%S.%3N")\t[SUCC]\t$1\e[0m"
 }
 
 expect(){
