@@ -66,11 +66,21 @@ docker run --name=lantern-headless \
 
 ### Scoop
 
-Coming soon
+```shell
+
+scoop bucket add lantern-headless https://github.com/getlantern/lantern-headless-client.git#scoop-bucket`
+
+scoop install lantern-headless-client
+```
 
 ### Homebrew
 
-Coming soon
+```shell
+brew tap getlantern/lantern-headless-client https://github.com/getlantern/lantern-headless-client.git#brew-tap
+
+brew install lantern-headless-client
+
+```
 
 ## Usage
 

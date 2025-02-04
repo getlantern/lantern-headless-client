@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema-pro.json
 version: 2
 project_name: lantern-headless
 signs:
@@ -11,7 +12,7 @@ signs:
       - "--yes"
     artifacts: all
 builds:
-  - # Set the builder to prebuilt
+  - # we are not building using goreleaser, but using make, so here we just use the prebuilt binaries
     builder: prebuilt
 
     goos:
@@ -35,8 +36,10 @@ builds:
       path: build/lantern-headless-{{ .Arch }}-{{ .Os }}
 
     binary: lantern-headless
+
 universal_binaries:
   - replace: true
+
 archives:
   - formats: ['tar.gz']
     # use zip for windows archives
@@ -103,6 +106,7 @@ nfpms:
       packager: Lantern Team <dev@getlantern.org>
       scripts:
         postupgrade: ./scripts/postinstall
+
 changelog:
   sort: asc
   filters:
@@ -149,3 +153,18 @@ aurs:
       package: |
         install -Dm755 "./lantern-headless" "${pkgdir}/usr/bin/lantern-headless"
         install -Dm644 "./scripts/lantern-headless.service" "${pkgdir}/usr/lib/systemd/user/lantern-headless.service"
+
+scoops:
+  - 
+    use: msi
+    repository:
+      name: lantern-headless-client
+      owner: getlantern
+      branch: scoop-bucket
+
+brews:
+  -
+    repository:
+      name: lantern-headless-client
+      owner: getlantern
+      branch: brew-tap
