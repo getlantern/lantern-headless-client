@@ -7,7 +7,7 @@ require (
 	github.com/BurntSushi/toml v1.2.1
 	github.com/alexflint/go-arg v1.4.3
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
-	github.com/getlantern/flashlight/v7 v7.6.183-0.20250130131819-a1e9379bca38
+	github.com/getlantern/flashlight/v7 v7.6.183-0.20250201050717-9196eae0c3a3
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/google/uuid v1.4.0
 	github.com/pterm/pterm v0.12.80
@@ -116,7 +116,7 @@ require (
 	github.com/getlantern/kcpwrapper v0.0.0-20230327091313-c12d7c17c6de // indirect
 	github.com/getlantern/keepcurrent v0.0.0-20240126172110-2e0264ca385d // indirect
 	github.com/getlantern/keyman v0.0.0-20230503155501-4e864ca2175b // indirect
-	github.com/getlantern/kindling v0.0.0-20250130123355-335942d6c759 // indirect
+	github.com/getlantern/kindling v0.0.0-20250131224031-b92afbdcc7e0 // indirect
 	github.com/getlantern/lantern-algeneva v0.0.0-20240930181006-6d3c00db1d5d // indirect
 	github.com/getlantern/lantern-water v0.0.0-20241218135103-60224336cf1d // indirect
 	github.com/getlantern/meta-scrubber v0.0.1 // indirect
@@ -142,7 +142,7 @@ require (
 	github.com/getlantern/yaml v0.0.0-20190801163808-0c9bb1ebf426 // indirect
 	github.com/getsentry/sentry-go v0.20.0 // indirect
 	github.com/go-errors/errors v1.4.2 // indirect
-	github.com/go-llsqlite/adapter v0.0.0-20230927005056-7f5ce7f0c916 // indirect
+	github.com/go-llsqlite/adapter v0.2.0 // indirect
 	github.com/go-llsqlite/crawshaw v0.5.1 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect

@@ -48,7 +48,7 @@ func NewClient(baseURL string, insecure bool, writer io.Writer) Client {
 	} else {
 		transport := kindling.NewKindling(
 			kindling.WithLogWriter(writer),
-			//kindling.WithDomainFronting("https://media.githubusercontent.com/media/getlantern/fronted/refs/heads/main/fronted.yaml.gz", ""),
+			kindling.WithDomainFronting("https://media.githubusercontent.com/media/getlantern/fronted/refs/heads/main/fronted.yaml.gz", ""),
 			kindling.WithProxyless("df.iantem.io"),
 		)
 		httpClient = transport.NewHTTPClient()

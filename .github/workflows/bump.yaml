@@ -1,0 +1,37 @@
+on:
+  repository_dispatch:
+    types: [flashlight-release-created]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+      - name: Update flashlight
+        run: |
+          go get -u github.com/getlantern/flashlight/v7@latest
+          go mod tidy
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add go.mod go.sum
+          # Don't continue if there's no changes.
+          git diff-index --quiet HEAD && exit
+          git commit -m "pushing flashlight update"
+          echo "pushing to main"
+          git push origin main
+      - name: Bump version and push tag
+        id: bump_tag
+        uses: anothrNick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DEFAULT_BUMP: patch

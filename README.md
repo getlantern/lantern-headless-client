@@ -1,6 +1,12 @@
+# Lantern
+
+Censorship circumvention tool available for free download on any operating system
+
+![cover page](https://github.com/getlantern/.github/blob/main/resources/cover_page.png)
+
 # Lantern Headless Client
 
-This is a headless client for Lantern, which is a peer-to-peer censorship circumvention tool. 
+This is a headless client for Lantern, which is a peer-to-peer censorship circumvention tool.
 It is designed to be run on a server/nas/router and to be used by a client running on a user's computer.
 It's targeted at advanced users who are comfortable with the command line.
 
@@ -16,6 +22,7 @@ Download the latest release from the [releases page](https://github.com/getlante
 Extract the tarball and run the binary.
 
 ### Debian/Ubuntu
+
 ```shell
 echo "deb [trusted=yes] https://apt.fury.io/getlantern/ /" > /etc/apt/sources.list.d/fury.list
 apt-get update
@@ -23,17 +30,20 @@ apt-get install lantern-headless
 ```
 
 ### RedHat/CentOS
+
 ```shell
 echo -e "[fury]\nname=Gemfury Private Repo\nbaseurl=https://yum.fury.io/getlantern/\nenabled=1\ngpgcheck=0" > /etc/yum.repos.d/fury.repo
 yum install lantern-headless
 ```
 
 ### Arch Linux
+
 ```
 yay -S lantern-headless-bin
 ```
 
 ### Alipne Linux
+
 ```shell
 echo "https://alpine.fury.io/getlantern/" >> /etc/apk/repositories
 apk add lantern-headless
@@ -41,16 +51,15 @@ apk add lantern-headless
 
 ### Docker
 
-
 ```shell
 docker run --name=lantern-headless \
   --volume=./lantern-data/:/data/ \
   --workdir=/ \
-  -p 12345:12345 \ 
+  -p 12345:12345 \
   -p 12346:12346 \
   --restart=always \
   --runtime=runc \
-  --detach=true \ 
+  --detach=true \
   getlantern/lantern-headless  \
   --data-path /data start --http-proxy-addr 0.0.0.0:12345 --socks-proxy-addr 0.0.0.0:12346
 ```
@@ -63,8 +72,8 @@ Coming soon
 
 Coming soon
 
-
 ## Usage
+
 `lantern-headless-client --help` will show you the available options.
 
 ```shell
@@ -96,17 +105,16 @@ The arguments can be passed via the command line, environment variables or enter
 
 > Please note that there is no way to pay for PRO account via the headless client. You need to use the desktop/mobile Lantern client for that.
 
-
 ### Sign up
 
 ```shell
-$ lantern-headless-client auth signup --email <email> 
+$ lantern-headless-client auth signup --email <email>
 ```
 
 ### Login
 
 ```shell
-$ lantern-headless-client auth login --email <email> 
+$ lantern-headless-client auth login --email <email>
 ```
 
 ### Logout
