@@ -5,6 +5,7 @@ package deviceid
 
 import (
 	"github.com/google/uuid"
+	"github.com/pterm/pterm"
 	"golang.org/x/sys/windows/registry"
 )
 

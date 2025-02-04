@@ -4,12 +4,13 @@
 package deviceid
 
 import (
-	"github.com/pterm/pterm"
 	"os"
 	"path/filepath"
 
-	"github.com/getlantern/appdir"
 	"github.com/google/uuid"
+	"github.com/pterm/pterm"
+
+	"github.com/getlantern/appdir"
 )
 
 // Get returns a unique identifier for this device. The identifier is a random UUID that's stored on
