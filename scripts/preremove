@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 root_dir="/etc/lantern-headless"
 service_name="lantern-headless"
 service_unit="lantern-headless.service"
