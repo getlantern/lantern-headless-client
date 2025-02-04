@@ -1,0 +1,5 @@
+build
+dist/
+/cosign.key
+.aider*
+.vscode/settings.json
