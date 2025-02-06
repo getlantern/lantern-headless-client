@@ -134,3 +134,7 @@ jobs:
           FURY_TOKEN: ${{ secrets.FURY_TOKEN }}
           MACOS_SIGN_P12: ${{ secrets.MACOS_SIGN_P12 }}
           MACOS_SIGN_PASSWORD: ${{ secrets.MACOS_SIGN_PASSWORD }}
+          QUILL_LOG_LEVEL: "debug"
+          MACOS_KEY_ID: ${{ secrets.MACOS_KEY_ID }}
+          MACOS_ISSUER_ID: ${{ secrets.MACOS_ISSUER_ID }}
+          MACOS_P8: ${{ secrets.MACOS_P8 }}

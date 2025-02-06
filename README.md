@@ -42,7 +42,7 @@ yum install lantern-headless
 yay -S lantern-headless-bin
 ```
 
-### Alipne Linux
+### Alpine Linux
 
 ```shell
 echo "https://alpine.fury.io/getlantern/" >> /etc/apk/repositories
@@ -76,7 +76,8 @@ scoop install lantern-headless-client
 ### Homebrew
 
 ```shell
-brew tap getlantern/lantern-headless-client https://github.com/getlantern/lantern-headless-client.git#brew-tap
+brew tap lantern/cli https://github.com/getlantern/lantern-headless-client.git
+git -C /opt/homebrew/Library/Taps/lantern/homebrew-cli/ checkout brew-tap
 
 brew install lantern-headless-client
 

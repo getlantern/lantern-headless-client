@@ -1,6 +1,13 @@
 # yaml-language-server: $schema=https://goreleaser.com/static/schema-pro.json
 version: 2
 project_name: lantern-headless
+metadata:
+  maintainers:
+    - "Lantern Team <dev@getlantern.org>"
+  description: Lantern Headless Client
+  homepage: "https://github.com/getlantern/lantern-headless-client"
+  license: "GPL"
+
 signs:
   - cmd: cosign
     stdin: ""
@@ -41,11 +48,11 @@ universal_binaries:
   - replace: true
 
 archives:
-  - formats: ['tar.gz']
+  - formats: ["tar.gz"]
     # use zip for windows archives
     format_overrides:
       - goos: windows
-        formats: ['zip']
+        formats: ["zip"]
     files:
       - LICENSE
       - README.md
@@ -57,21 +64,25 @@ notarize:
       sign:
         certificate: "{{.Env.MACOS_SIGN_P12}}"
         password: "{{.Env.MACOS_SIGN_PASSWORD}}"
+      notarize:
+        key: "{{.Env.MACOS_P8}}"
+        key_id: "{{.Env.MACOS_KEY_ID}}"
+        issuer_id: "{{.Env.MACOS_ISSUER_ID}}"
+        # wait: true
+        # timeout: 50m
+
 
 dmg:
-  -
-    name: "lantern-headless-{{.Arch}}"
+  - name: "lantern-headless-{{.Arch}}"
     replace: true
 
 msi:
-  -
-    name: "lantern-headless-{{.MsiArch}}"
+  - name: "lantern-headless-{{.MsiArch}}"
     replace: true
     wxs: ./scripts/setup.wsx
 
 nfpms:
-  -
-    package_name: "lantern-headless"
+  - package_name: "lantern-headless"
     formats:
       - apk
       - deb
@@ -124,14 +135,12 @@ furies:
       - rpm
 
 dockers:
-  -
-    image_templates:
+  - image_templates:
       - "getlantern/lantern-headless:latest"
       - "getlantern/lantern-headless:{{ .Tag }}"
 
 dockerhub:
-  -
-    images:
+  - images:
       - getlantern/lantern-headless
     username: getlantern
     secret_name: DOCKER_PASSWORD
@@ -140,23 +149,21 @@ dockerhub:
         path: ./README.md
 
 aurs:
-    -
-      name: lantern-headless-bin
-      homepage: "https://github.com/getlantern/lantern-headless-client"
-      maintainers:
-        - "Lantern Team <dev@getlantern.org>"
-      description: |
-        Lantern Headless Client
-      license: "GPL"
-      git_url: "ssh://aur@aur.archlinux.org/lantern-headless-bin.git"
-      private_key: "{{ .Env.AUR_KEY }}"
-      package: |
-        install -Dm755 "./lantern-headless" "${pkgdir}/usr/bin/lantern-headless"
-        install -Dm644 "./scripts/lantern-headless.service" "${pkgdir}/usr/lib/systemd/user/lantern-headless.service"
+  - name: lantern-headless-bin
+    homepage: "https://github.com/getlantern/lantern-headless-client"
+    maintainers:
+      - "Lantern Team <dev@getlantern.org>"
+    description: |
+      Lantern Headless Client
+    license: "GPL"
+    git_url: "ssh://aur@aur.archlinux.org/lantern-headless-bin.git"
+    private_key: "{{ .Env.AUR_KEY }}"
+    package: |
+      install -Dm755 "./lantern-headless" "${pkgdir}/usr/bin/lantern-headless"
+      install -Dm644 "./scripts/lantern-headless.service" "${pkgdir}/usr/lib/systemd/user/lantern-headless.service"
 
 scoops:
-  - 
-    use: msi
+  - use: msi
     repository:
       name: lantern-headless-client
       owner: getlantern
@@ -164,6 +171,7 @@ scoops:
 
 brews:
   -
+    install: bin.install "lantern-headless"
     repository:
       name: lantern-headless-client
       owner: getlantern
