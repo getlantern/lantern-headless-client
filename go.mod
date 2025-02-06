@@ -1,14 +1,15 @@
 module github.com/getlantern/lantern-headless-client
 
-go 1.22.4
+go 1.23
 
 require (
 	github.com/1Password/srp v0.2.0
 	github.com/BurntSushi/toml v1.2.1
 	github.com/alexflint/go-arg v1.4.3
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
-	github.com/getlantern/flashlight/v7 v7.6.183-0.20250201050717-9196eae0c3a3
+	github.com/getlantern/flashlight/v7 v7.6.185
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
+	github.com/getlantern/kindling v0.0.0-20250205183051-ed38ca19af3d
 	github.com/google/uuid v1.4.0
 	github.com/pterm/pterm v0.12.80
 	github.com/stretchr/testify v1.10.0
@@ -103,7 +104,7 @@ require (
 	github.com/getlantern/eventual/v2 v2.0.2 // indirect
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c // indirect
-	github.com/getlantern/fronted v0.0.0-20250129184840-abcec12f754e // indirect
+	github.com/getlantern/fronted v0.0.0-20250205182429-f8aa4896e1e5 // indirect
 	github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 // indirect
 	github.com/getlantern/hellosplitter v0.1.1 // indirect
 	github.com/getlantern/hex v0.0.0-20220104173244-ad7e4b9194dc // indirect
@@ -116,7 +117,6 @@ require (
 	github.com/getlantern/kcpwrapper v0.0.0-20230327091313-c12d7c17c6de // indirect
 	github.com/getlantern/keepcurrent v0.0.0-20240126172110-2e0264ca385d // indirect
 	github.com/getlantern/keyman v0.0.0-20230503155501-4e864ca2175b // indirect
-	github.com/getlantern/kindling v0.0.0-20250131224031-b92afbdcc7e0 // indirect
 	github.com/getlantern/lantern-algeneva v0.0.0-20240930181006-6d3c00db1d5d // indirect
 	github.com/getlantern/lantern-water v0.0.0-20241218135103-60224336cf1d // indirect
 	github.com/getlantern/meta-scrubber v0.0.1 // indirect
