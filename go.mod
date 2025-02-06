@@ -9,7 +9,7 @@ require (
 	github.com/BurntSushi/toml v1.2.1
 	github.com/alexflint/go-arg v1.4.3
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
-	github.com/getlantern/flashlight/v7 v7.6.186
+	github.com/getlantern/flashlight/v7 v7.6.187
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/kindling v0.0.0-20250206162439-a9bc03fb5d84
 	github.com/google/uuid v1.6.0
@@ -86,7 +86,7 @@ require (
 	github.com/frankban/quicktest v1.14.6 // indirect
 	github.com/gaukas/wazerofs v0.1.0 // indirect
 	github.com/getlantern/algeneva v0.0.0-20240605225338-caba0b3edf03 // indirect
-	github.com/getlantern/broflake v0.0.0-20250202015833-e859e64ae0c7 // indirect
+	github.com/getlantern/broflake v0.0.0-20250206174903-5efd190de9c6 // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
 	github.com/getlantern/byteexec v0.0.0-20220903142956-e6ed20032cfd // indirect
 	github.com/getlantern/cmux v0.0.0-20230301223233-dac79088a4c0 // indirect
