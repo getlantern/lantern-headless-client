@@ -3,3 +3,4 @@ dist/
 /cosign.key
 .aider*
 .vscode/settings.json
+lantern-headless-client
