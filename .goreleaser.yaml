@@ -165,14 +165,16 @@ aurs:
 scoops:
   - use: msi
     repository:
-      name: lantern-headless-client
+      token: "{{ .Env.TAP_BUCKET_TOKEN }}"
+      name: lantern-headless-client-scoop-bucket
       owner: getlantern
-      branch: scoop-bucket
+      branch: main
 
 brews:
   -
     install: bin.install "lantern-headless"
     repository:
-      name: lantern-headless-client
+      token: "{{ .Env.TAP_BUCKET_TOKEN }}"
+      name: lantern-headless-client-brew-tap
       owner: getlantern
-      branch: brew-tap
+      branch: main
