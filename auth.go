@@ -123,10 +123,39 @@ func authCmd(ctx context.Context, cmd *AuthCmd, overrideAuthURL string, logWrite
 		err = signup(ctx, client, u, p)
 	case cmd.Logout != nil:
 		logout()
+		pterm.Info.Println("Logged out, goodbye!")
+	default:
+		askForAuthSubCmd(cmd)
+		authCmd(ctx, cmd, overrideAuthURL, logWriter)
 	}
 
 	if err != nil {
 		pterm.Error.Printfln("Error authenticating: %s", err.Error())
+		os.Exit(2)
+	}
+}
+
+// askForAuthSubCmd handles an empty "auth" command, requiring selection of a subcommand
+func askForAuthSubCmd(cmd *AuthCmd) {
+	options := []string{"login", "signup", "logout"}
+	selector := pterm.DefaultInteractiveSelect.WithOptions(options)
+	selection, err := pterm.InteractiveSelectPrinter.WithOptions(*selector, options).Show("Select auth action")
+	if err != nil {
+		pterm.Error.Println("Error reading command")
+		os.Exit(2)
+	}
+	switch selection {
+	case "login":
+		args.Auth.Login = &LoginCmd{}
+		return
+	case "signup":
+		args.Auth.Signup = &SignupCmd{}
+		return
+	case "logout":
+		args.Auth.Logout = &LogoutCmd{}
+		return
+	default:
+		pterm.Error.Println("Invalid auth subcommand")
 		os.Exit(2)
 	}
 }
