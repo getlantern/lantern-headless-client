@@ -8,6 +8,8 @@ permissions:
 
 jobs:
   bump:
+    # This job is disabled for now
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

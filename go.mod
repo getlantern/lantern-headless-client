@@ -2,8 +2,6 @@ module github.com/getlantern/lantern-headless-client
 
 go 1.23.0
 
-toolchain go1.23.5
-
 require (
 	github.com/1Password/srp v0.2.0
 	github.com/BurntSushi/toml v1.2.1
@@ -40,7 +38,7 @@ require (
 	github.com/alextanhongpin/go-bandit v0.0.0-20191125130111-30de60d69bae // indirect
 	github.com/alitto/pond/v2 v2.1.6 // indirect
 	github.com/anacrolix/chansync v0.6.0 // indirect
-	github.com/anacrolix/confluence v1.15.0 // indirect
+	github.com/anacrolix/confluence v1.15.1-0.20240712051721-b0799bfc4a73 // indirect
 	github.com/anacrolix/dht/v2 v2.22.0 // indirect
 	github.com/anacrolix/envpprof v1.4.0 // indirect
 	github.com/anacrolix/generics v0.0.3-0.20240902042256-7fb2702ef0ca // indirect
@@ -74,10 +72,10 @@ require (
 	github.com/containerd/console v1.0.3 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
-	github.com/dsoprea/go-exif/v2 v2.0.0-20230826092837-6579e82b732d // indirect
-	github.com/dsoprea/go-logging v0.0.0-20200710184922-b02d349568dd // indirect
-	github.com/dsoprea/go-png-image-structure v0.0.0-20210512210324-29b889a6093d // indirect
-	github.com/dsoprea/go-utility v0.0.0-20221003172846-a3e1774ef349 // indirect
+	github.com/dsoprea/go-exif/v2 v2.0.0-20200604193436-ca8584a0e1c4 // indirect
+	github.com/dsoprea/go-logging v0.0.0-20200517223158-a10564966e9d // indirect
+	github.com/dsoprea/go-png-image-structure v0.0.0-20200615034826-4cfc78940228 // indirect
+	github.com/dsoprea/go-utility v0.0.0-20200512094054-1abbbc781176 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/dvyukov/go-fuzz v0.0.0-20240924070022-e577bee5275c // indirect
 	github.com/edsrzf/mmap-go v1.2.0 // indirect
@@ -95,7 +93,7 @@ require (
 	github.com/getlantern/common v1.2.1-0.20230427204521-6ac18c21db39 // indirect
 	github.com/getlantern/context v0.0.0-20220418194847-3d5e7a086201 // indirect
 	github.com/getlantern/detour v0.0.0-20230503144615-d3106a68f79e // indirect
-	github.com/getlantern/dhtup v0.0.0-20240217002836-8587da02c55c // indirect
+	github.com/getlantern/dhtup v0.0.0-20230218063409-258bc7570a27 // indirect
 	github.com/getlantern/dns v0.0.0-20240124035051-0d45dd3cfe54 // indirect
 	github.com/getlantern/dnsgrab v0.0.0-20240830183253-5c3e2386c39e // indirect
 	github.com/getlantern/domains v0.0.0-20220311111720-94f59a903271 // indirect
@@ -143,8 +141,8 @@ require (
 	github.com/getlantern/tlsresumption v0.0.0-20241210052744-a1c6aacc1d4d // indirect
 	github.com/getlantern/tlsutil v0.5.3 // indirect
 	github.com/getlantern/yaml v0.0.0-20190801163808-0c9bb1ebf426 // indirect
-	github.com/getsentry/sentry-go v0.31.1 // indirect
-	github.com/go-errors/errors v1.5.1 // indirect
+	github.com/getsentry/sentry-go v0.20.0 // indirect
+	github.com/go-errors/errors v1.4.2 // indirect
 	github.com/go-llsqlite/adapter v0.2.0 // indirect
 	github.com/go-llsqlite/crawshaw v0.5.5 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
@@ -154,13 +152,13 @@ require (
 	github.com/goccy/go-yaml v1.15.17 // indirect
 	github.com/gofrs/uuid/v5 v5.3.0 // indirect
 	github.com/golang/gddo v0.0.0-20210115222349-20d68f94ee1f // indirect
-	github.com/golang/geo v0.0.0-20230421003525-6adc56603217 // indirect
+	github.com/golang/geo v0.0.0-20200319012246-673a6f80352d // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/pprof v0.0.0-20250202011525-fc3143867406 // indirect
 	github.com/gookit/color v1.5.4 // indirect
-	github.com/gorilla/mux v1.8.1 // indirect
+	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.0 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
@@ -287,4 +285,6 @@ require (
 
 replace github.com/tetratelabs/wazero => github.com/refraction-networking/wazero v1.7.1-w
 
-//replace github.com/getlantern/flashlight/v7 => ../flashlight
+// replace github.com/getlantern/flashlight/v7 => ../flashlight
+
+replace github.com/anacrolix/confluence => github.com/anacrolix/confluence v1.15.1-0.20240712051721-b0799bfc4a73
