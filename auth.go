@@ -123,6 +123,9 @@ func authCmd(ctx context.Context, cmd *AuthCmd, overrideAuthURL string, logWrite
 		err = signup(ctx, client, u, p)
 	case cmd.Logout != nil:
 		logout()
+	default:
+		printHelp()
+		os.Exit(2)
 	}
 
 	if err != nil {

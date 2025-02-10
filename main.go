@@ -3,15 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/getlantern/golog"
-	"github.com/pterm/pterm"
-	"gopkg.in/natefinch/lumberjack.v2"
 	"io"
 	"os"
 	"path/filepath"
 	"time"
 
-	"github.com/alexflint/go-arg"
+	"github.com/getlantern/golog"
+	"github.com/pterm/pterm"
+	"gopkg.in/natefinch/lumberjack.v2"
+
 	"github.com/getlantern/appdir"
 )
 
@@ -55,7 +55,6 @@ func setupDataFolder() {
 }
 
 func main() {
-	argParser := arg.MustParse(&args)
 	setupOutput()
 	setupDataFolder()
 	logWriter := setupLog()
@@ -66,12 +65,10 @@ func main() {
 	switch {
 	case args.Auth != nil:
 		authCmd(ctx, args.Auth, args.AuthURL, logWriter)
-		break
 	case args.Serve != nil:
 		readAuth()
 		serve(args.Serve)
-		break
 	default:
-		argParser.WriteHelp(pterm.DefaultLogger.Writer)
+		printHelp()
 	}
 }

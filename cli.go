@@ -2,6 +2,10 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/alexflint/go-arg"
+	"github.com/pterm/pterm"
+
 	"github.com/getlantern/lantern-headless-client/deviceid"
 	"github.com/getlantern/lantern-headless-client/shared"
 )
@@ -55,3 +59,8 @@ var userID int64
 var userToken string
 var deviceId = deviceid.Get()
 var configFilePath, logFilePath string
+var argParser = arg.MustParse(&args)
+
+func printHelp() {
+	argParser.WriteHelp(pterm.DefaultLogger.Writer)
+}
