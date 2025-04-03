@@ -5,12 +5,14 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/getlantern/kindling"
-	"github.com/pterm/pterm"
 	"io"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/getlantern/fronted"
+	"github.com/getlantern/kindling"
+	"github.com/pterm/pterm"
 
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -46,9 +48,12 @@ func NewClient(baseURL string, insecure bool, writer io.Writer) Client {
 			Timeout: 30 * time.Second,
 		}
 	} else {
+		frontedConfig := fronted.NewFronted(
+			fronted.WithConfigURL("https://media.githubusercontent.com/media/getlantern/fronted/refs/heads/main/fronted.yaml.gz"),
+		)
 		transport := kindling.NewKindling(
 			kindling.WithLogWriter(writer),
-			kindling.WithDomainFronting("https://media.githubusercontent.com/media/getlantern/fronted/refs/heads/main/fronted.yaml.gz", ""),
+			kindling.WithDomainFronting(frontedConfig),
 			kindling.WithProxyless("df.iantem.io"),
 		)
 		httpClient = transport.NewHTTPClient()
