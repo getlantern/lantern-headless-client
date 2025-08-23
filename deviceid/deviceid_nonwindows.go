@@ -24,7 +24,6 @@ func Get(dataPath string) string {
 		if deviceID == "" {
 			deviceID = newDeviceId()
 		}
-		pterm.Debug.Println("Storing deviceID")
 		err = os.WriteFile(filename, []byte(deviceID), 0644)
 		if err != nil {
 			pterm.Error.Printfln("Error storing deviceID, defaulting to old-style device ID, error: %s", err.Error())
@@ -37,22 +36,19 @@ func Get(dataPath string) string {
 
 }
 
-// Returns a deviceID stored at `$HOME/.lanternsecrets/.deviceid`.
+// readFromHomeDir returns a deviceID stored at `$HOME/.lanternsecrets/.deviceid`.
 // If the file isn't readable, an empty string is returned.
 // This location was used by earlier versions of the client.
 func readFromHomeDir() string {
-	pterm.Debug.Println("Reading deviceID from home directory")
 	filename := filepath.Join(appdir.InHomeDir(".lanternsecrets/.deviceid"))
 	deviceID, err := os.ReadFile(filename)
 	if err != nil {
 		return ""
 	}
-	pterm.Debug.Println("Found deviceID stored inside home directory")
 	return string(deviceID)
 }
 
 func newDeviceId() string {
-	pterm.Debug.Println("Generating new deviceID")
 	deviceID, err := uuid.NewRandom()
 	if err != nil {
 		pterm.Error.Printfln("Error generating new deviceID, defaulting to old-style device ID, error: %s", err.Error())
