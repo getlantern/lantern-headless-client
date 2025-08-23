@@ -40,7 +40,7 @@ func Get(dataPath string) string {
 // If the file isn't readable, an empty string is returned.
 // This location was used by earlier versions of the client.
 func readFromHomeDir() string {
-	filename := filepath.Join(appdir.InHomeDir(".lanternsecrets/.deviceid"))
+	filename := appdir.InHomeDir(".lanternsecrets/.deviceid")
 	deviceID, err := os.ReadFile(filename)
 	if err != nil {
 		return ""
