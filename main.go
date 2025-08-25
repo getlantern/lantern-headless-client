@@ -13,6 +13,7 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 
 	"github.com/getlantern/appdir"
+	"github.com/getlantern/lantern-headless-client/deviceid"
 )
 
 func setupOutput() {
@@ -57,6 +58,7 @@ func setupDataFolder() {
 func main() {
 	setupOutput()
 	setupDataFolder()
+	deviceId = deviceid.Get(args.DataPath)
 	logWriter := setupLog()
 	defer func(logWriter *lumberjack.Logger) {
 		_ = logWriter.Close()

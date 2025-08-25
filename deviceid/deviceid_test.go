@@ -7,8 +7,8 @@ import (
 )
 
 func TestGet(t *testing.T) {
-	id1 := Get()
+	id1 := Get("")
 	require.True(t, len(id1) > 8)
-	id2 := Get()
+	id2 := Get("")
 	require.Equal(t, id1, id2)
 }

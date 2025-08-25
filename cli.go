@@ -6,7 +6,6 @@ import (
 	"github.com/alexflint/go-arg"
 	"github.com/pterm/pterm"
 
-	"github.com/getlantern/lantern-headless-client/deviceid"
 	"github.com/getlantern/lantern-headless-client/shared"
 )
 
@@ -57,7 +56,7 @@ func (Args) Version() string {
 var args Args
 var userID int64
 var userToken string
-var deviceId = deviceid.Get()
+var deviceId string
 var configFilePath, logFilePath string
 var argParser = arg.MustParse(&args)
 
