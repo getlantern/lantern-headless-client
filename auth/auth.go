@@ -52,6 +52,7 @@ func NewClient(baseURL string, insecure bool, writer io.Writer) Client {
 			fronted.WithConfigURL("https://media.githubusercontent.com/media/getlantern/fronted/refs/heads/main/fronted.yaml.gz"),
 		)
 		transport := kindling.NewKindling(
+			"lantern-headless-client",
 			kindling.WithLogWriter(writer),
 			kindling.WithDomainFronting(frontedConfig),
 			kindling.WithProxyless("df.iantem.io"),
