@@ -11,10 +11,11 @@ metadata:
 signs:
   - cmd: cosign
     stdin: ""
+    signature: "${artifact}.sigstore.json"
     args:
       - "sign-blob"
-      - "--key=env://COSIGN_KEY"
-      - "--output-signature=${signature}"
+      - "--key=cosign.key"
+      - "--bundle=${signature}"
       - "${artifact}"
       - "--yes"
     artifacts: all
@@ -135,10 +136,13 @@ furies:
       - deb
       - rpm
 
-dockers:
-  - image_templates:
-      - "getlantern/lantern-headless:latest"
-      - "getlantern/lantern-headless:{{ .Tag }}"
+dockers_v2:
+  - id: "lantern-headless"
+    images:
+      - "getlantern/lantern-headless"
+    tags:
+      - "{{ .Tag }}"
+      - "latest"
 
 dockerhub:
   - images:
@@ -171,9 +175,8 @@ scoops:
       owner: getlantern
       branch: main
 
-brews:
+homebrew_casks:
   -
-    install: bin.install "lantern-headless"
     repository:
       token: "{{ .Env.TAP_BUCKET_TOKEN }}"
       name: lantern-headless-client-brew-tap
