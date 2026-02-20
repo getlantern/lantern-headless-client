@@ -138,6 +138,7 @@ furies:
 
 dockers_v2:
   - id: "lantern-headless"
+    sbom: false
     images:
       - "getlantern/lantern-headless"
     tags:
