@@ -51,49 +51,49 @@ jobs:
           if-no-files-found: "error"
           retention-days: 1
 
-  sign:
-    runs-on: windows-latest
-    needs: build
-    steps:
-      - name: Download production artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: build
-          pattern: "lantern-headless-*-windows"
-          merge-multiple: true
-
-      - name: Sign EXE with Azure Code Signing
-        uses: getlantern/trusted-signing-action@main
-        with:
-          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          endpoint: https://wus2.codesigning.azure.net/
-          code-signing-account-name: code-signing
-          certificate-profile-name: Lantern
-          files-folder: ${{ github.workspace }}\build
-          file-digest: SHA256
-          timestamp-rfc3161: http://timestamp.acs.microsoft.com
-          timestamp-digest: SHA256
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: lantern-headless-amd64-windows
-          path: build/lantern-headless-amd64-windows
-          overwrite: true
-          if-no-files-found: "error"
-          retention-days: 1
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: lantern-headless-386-windows
-          path: build/lantern-headless-386-windows
-          overwrite: true
-          if-no-files-found: "error"
-          retention-days: 1
+#  sign:
+#    runs-on: windows-latest
+#    needs: build
+#    steps:
+#      - name: Download production artifacts
+#        uses: actions/download-artifact@v4
+#        with:
+#          path: build
+#          pattern: "lantern-headless-*-windows"
+#          merge-multiple: true
+#
+#      - name: Sign EXE with Azure Code Signing
+#        uses: getlantern/trusted-signing-action@main
+#        with:
+#          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+#          endpoint: https://wus2.codesigning.azure.net/
+#          code-signing-account-name: code-signing
+#          certificate-profile-name: Lantern
+#          files-folder: ${{ github.workspace }}\build
+#          file-digest: SHA256
+#          timestamp-rfc3161: http://timestamp.acs.microsoft.com
+#          timestamp-digest: SHA256
+#      - name: Archive production artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: lantern-headless-amd64-windows
+#          path: build/lantern-headless-amd64-windows
+#          overwrite: true
+#          if-no-files-found: "error"
+#          retention-days: 1
+#      - name: Archive production artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: lantern-headless-386-windows
+#          path: build/lantern-headless-386-windows
+#          overwrite: true
+#          if-no-files-found: "error"
+#          retention-days: 1
 
   release:
-    needs: sign
+#    needs: sign
     runs-on:
       group: large-runners
     steps:
