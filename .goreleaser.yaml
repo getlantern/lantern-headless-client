@@ -14,7 +14,7 @@ signs:
     signature: "${artifact}.sigstore.json"
     args:
       - "sign-blob"
-      - "--key=cosign.key"
+      - "--key=env://COSIGN_KEY"
       - "--bundle=${signature}"
       - "${artifact}"
       - "--yes"
