@@ -35,12 +35,10 @@ check-env:
 
 
 # Actually Build the application (called inside the build container)
-build-internal: export GOPRIVATE = github.com/getlantern
+# Modules are fetched through the public Go proxy and checksum database so release
+# builds verify against the same go.sum hashes as anyone building from source.
 build-internal: export CGO_ENABLED=1
 build-internal: check-env
-	@apt update
-	@apt install git-lfs
-	@git lfs install
 	go build -ldflags="$(LDFLAGS)" -buildvcs=false -o ./build/$(BIN_NAME) .
 	chown $(TARGET_UID):$(TARGET_GID) ./build/$(BIN_NAME)
 

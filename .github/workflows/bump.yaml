@@ -20,8 +20,6 @@ jobs:
           go-version-file: "go.mod"
       - name: Update flashlight
         run: |
-          sudo apt-get update && sudo apt-get install -y git-lfs
-          export GOPRIVATE=github.com/getlantern
           go get -u github.com/getlantern/flashlight/v7@latest
           go mod tidy
           git config user.name github-actions
