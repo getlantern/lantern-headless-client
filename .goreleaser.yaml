@@ -58,6 +58,8 @@ archives:
       - LICENSE
       - README.md
       - src: ./scripts/lantern-headless.service
+      - src: ./scripts/lantern-unbounded.service
+      - src: ./scripts/unbounded.env.example
 
 notarize:
   macos:
@@ -108,6 +110,18 @@ nfpms:
         dst: /etc/lantern-headless/lantern-headless.sysvinit
         file_info:
           mode: 0700
+          owner: root
+          group: root
+      - src: ./scripts/lantern-unbounded.service
+        dst: /etc/lantern-headless/lantern-unbounded.service
+        file_info:
+          mode: 0644
+          owner: root
+          group: root
+      - src: ./scripts/unbounded.env.example
+        dst: /etc/lantern-headless/unbounded.env.example
+        file_info:
+          mode: 0644
           owner: root
           group: root
     scripts:
@@ -167,6 +181,8 @@ aurs:
     package: |
       install -Dm755 "./lantern-headless" "${pkgdir}/usr/bin/lantern-headless"
       install -Dm644 "./scripts/lantern-headless.service" "${pkgdir}/usr/lib/systemd/user/lantern-headless.service"
+      install -Dm644 "./scripts/lantern-unbounded.service" "${pkgdir}/usr/lib/systemd/system/lantern-unbounded.service"
+      install -Dm644 "./scripts/unbounded.env.example" "${pkgdir}/etc/lantern-headless/unbounded.env.example"
 
 scoops:
   - use: msi

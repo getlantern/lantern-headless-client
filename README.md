@@ -103,6 +103,7 @@ Options:
 Commands:
   auth                   Authenticate with Lantern
   start                  Start Lantern
+  unbounded              Share your connection as an Unbounded volunteer peer
 ```
 
 ## Authentication
@@ -131,6 +132,69 @@ $ lantern-headless-client auth login --email <email>
 
 ```shell
 $ lantern-headless-client auth logout
+```
+
+## Sharing your connection (Unbounded)
+
+`lantern-headless unbounded` turns the host into an [Unbounded](https://github.com/getlantern/unbounded) volunteer peer.
+Users in censored regions reach it over WebRTC, brokered by Lantern's discovery server, and it relays their traffic
+to a Lantern egress server. No account is needed, and the peer opens no inbound ports: it only needs outbound UDP and
+HTTPS. It will not help many users from behind a symmetric NAT; the startup NAT check tells you which kind you have.
+
+```shell
+$ lantern-headless unbounded --max-peers 5 --bandwidth-limit 5mbit --data-cap 50GB/day
+```
+
+```shell
+Usage: lantern-headless-client unbounded [--freddie FREDDIE] [--egress EGRESS] [--max-peers MAX-PEERS] [--bandwidth-limit BANDWIDTH-LIMIT] [--data-cap DATA-CAP] [--target-countries TARGET-COUNTRIES] [--tag TAG] [--netstated NETSTATED] [--nat-fail-timeout NAT-FAIL-TIMEOUT] [--stats-interval STATS-INTERVAL] [--skip-nat-check] [--pprof-addr PPROF-ADDR]
+
+Options:
+  --freddie FREDDIE      Discovery (signaling) server URL [default: https://freddie.iantem.io, env: UNBOUNDED_FREDDIE]
+  --egress EGRESS        Egress server WebSocket URL [default: wss://unbounded.iantem.io:443, env: UNBOUNDED_EGRESS]
+  --max-peers MAX-PEERS  How many censored peers to serve at once [default: 5, env: UNBOUNDED_MAX_PEERS]
+  --bandwidth-limit BANDWIDTH-LIMIT
+                         Byte rate cap per direction, e.g. 5mbit, 500KB/s, 1.5MiB/s (default: unlimited) [env: UNBOUNDED_BANDWIDTH_LIMIT]
+  --data-cap DATA-CAP    Pause once this much has been relayed in a period, e.g. 50GB/day, 1TB/month (default: none) [env: UNBOUNDED_DATA_CAP]
+  --target-countries TARGET-COUNTRIES
+                         Comma-separated ISO 3166-1 alpha-2 countries whose users to prefer, e.g. IR,RU [env: UNBOUNDED_TARGET_COUNTRIES]
+  --tag TAG              Label for this peer in the swarm's network view [env: UNBOUNDED_TAG]
+  --nat-fail-timeout NAT-FAIL-TIMEOUT
+                         How long a WebRTC attempt may spend in NAT traversal [default: 15s, env: UNBOUNDED_NAT_FAIL_TIMEOUT]
+  --stats-interval STATS-INTERVAL
+                         How often to log relay statistics (0 disables) [default: 60s, env: UNBOUNDED_STATS_INTERVAL]
+  --skip-nat-check       Skip the startup NAT mapping probe [env: UNBOUNDED_SKIP_NAT_CHECK]
+```
+
+Limits:
+
+- `--max-peers` is how many users are helped at the same time.
+- `--bandwidth-limit` caps the byte rate in each direction for the whole process. A lowercase `b` or `bit` means bits
+  (`5mbit`, `20Mbps`), an uppercase `B` means bytes (`500KB/s`, `1.5MiB/s`).
+- `--data-cap` stops helping once that much has been relayed in the current day, week or month (local time) and
+  resumes when the period rolls over. Usage is persisted in the data directory, so a restart does not reset it.
+
+Every option is also an environment variable, which is how the service unit is configured.
+
+### As a Linux service
+
+The packages install an opt-in systemd unit. It runs as an unprivileged dynamic user with its state in
+`/var/lib/lantern-unbounded`:
+
+```shell
+cp /etc/lantern-headless/unbounded.env.example /etc/lantern-headless/unbounded.env   # then edit the limits
+systemctl enable --now /etc/lantern-headless/lantern-unbounded.service
+journalctl -u lantern-unbounded -f
+```
+
+### In Docker
+
+```shell
+docker run --name=lantern-unbounded \
+  --volume=./lantern-unbounded/:/data/ \
+  --restart=always \
+  --detach=true \
+  getlantern/lantern-headless \
+  --data-path /data unbounded --bandwidth-limit 5mbit --data-cap 50GB/day
 ```
 
 ## Starting Lantern

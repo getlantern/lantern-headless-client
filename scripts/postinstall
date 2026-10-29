@@ -40,3 +40,4 @@ else
   expect "chkconfig --add ${service_name}"
 fi
 succ "service enabled successfully"
+info "to also share your connection as an Unbounded volunteer peer: systemctl enable --now ${root_dir}/lantern-unbounded.service (settings: ${root_dir}/unbounded.env.example)"
