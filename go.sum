@@ -280,8 +280,8 @@ github.com/getlantern/amp v0.0.0-20251211213807-4cbc22624b9f h1:EaMXfKXz+zPM6Jb1
 github.com/getlantern/amp v0.0.0-20251211213807-4cbc22624b9f/go.mod h1:qnMv9szb8JK3kA9W4N2FlYUMj1GkA0x7QEUEPD7tk4o=
 github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da h1:T/pxF37Z9SIQCHhMMUITZ3rhKRL0Noi9XxNwxKdBNw0=
 github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da/go.mod h1:3vR6+jQdWfWojZ77w+htCqEF5MO/Y2twJOpAvFuM9po=
-github.com/getlantern/broflake v0.0.0-20261027185621-f3e54408e4f0 h1:VJ/8hMiMLn4umw9vswQWe3MraR37vG8jlPv/nD1K/mE=
-github.com/getlantern/broflake v0.0.0-20261027185621-f3e54408e4f0/go.mod h1:bg92IeUtbQuhHzIt7qMCvu0eMfhbckRwjnoEssG4j2k=
+github.com/getlantern/broflake v0.0.0-20261029103008-5dfefb75f7b5 h1:JK9aiIvZZnphRknPG9mqUK2dwprV/5GwC4IC5FUd3XA=
+github.com/getlantern/broflake v0.0.0-20261029103008-5dfefb75f7b5/go.mod h1:wIe3Pq0VMMADBiKdW2MUV0EW6veThHMeKuJFvmcGPc4=
 github.com/getlantern/bufconn v0.0.0-20190625204133-a08544339f8d/go.mod h1:d6O4RY+V87kIt4o9wru4SaNo7C2NAkD3YnmJFXEpODo=
 github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 h1:8WjDNmpDLFVsAfcnHxqF4pfVKkdAQxyJ9iCHB4LxSfc=
 github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493/go.mod h1:d6O4RY+V87kIt4o9wru4SaNo7C2NAkD3YnmJFXEpODo=
@@ -331,8 +331,8 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight/v7 v7.6.244-0.20261029101001-251242e1c12e h1:qGIX6tm+3oVLQj764FGvopjW5wZSMnJzxr4fGAN4gA8=
-github.com/getlantern/flashlight/v7 v7.6.244-0.20261029101001-251242e1c12e/go.mod h1:5erTx0qnVEa0Y6/nniyxxzO0yy3jduHVyon1V8x+YGA=
+github.com/getlantern/flashlight/v7 v7.6.244-0.20261029103048-8738547b9826 h1:PHm6k47XgW3fuIrCKmKDqME9rfIWmlOb/g4Mk8MKjSg=
+github.com/getlantern/flashlight/v7 v7.6.244-0.20261029103048-8738547b9826/go.mod h1:DT7whua5oIqJXfEkypZFRc6kg9FvzY+URVR5JKCK0VQ=
 github.com/getlantern/fronted v0.0.0-20260220001536-2f158428bf15 h1:SabGMM/j+n99cPDXnUaTaWBK93bOEVED4ZDkS8z7lBg=
 github.com/getlantern/fronted v0.0.0-20260220001536-2f158428bf15/go.mod h1:1a+iv1xzGxZWj/vCHzr8Z3dF9H1sNTuMSPHUqRsgbl0=
 github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 h1:RBKofGGMt2k6eGBwX8mky9qunjL+KnAp9JdzXjiRkRw=
@@ -406,8 +406,8 @@ github.com/getlantern/proxy/v3 v3.0.0-20240328103708-9185589b6a99/go.mod h1:I5Sv
 github.com/getlantern/psmux v1.5.15-0.20200903210100-947ca5d91683/go.mod h1:GtXRvtMItoflWGLPE7GNq+AdL7BnmpaaNLtDQVD1XHU=
 github.com/getlantern/psmux v1.5.15 h1:VUCEk8MIsvAj90wNYRyY2fE9ZL4LIRhi1W5V9aycA9A=
 github.com/getlantern/psmux v1.5.15/go.mod h1:nyp/sr4uTbWpUh7Q2WovRb07LeLNUxDg8kAdS726FIw=
-github.com/getlantern/quicwrapper v0.0.0-20261029095933-e47b3a308fa6 h1:anbby596C2fieOtMv64WkgYa6+dGOPVanpuDpxlyzHY=
-github.com/getlantern/quicwrapper v0.0.0-20261029095933-e47b3a308fa6/go.mod h1:0xScojRCljjv6eR8CI+yenqdolyRK7h/1r0HQcgPKTM=
+github.com/getlantern/quicwrapper v0.0.0-20261029102957-5903336cfabc h1:EKmT0NYyt59LTnLGoDJayBGk8TGUwGI5yI+MV+hYi+4=
+github.com/getlantern/quicwrapper v0.0.0-20261029102957-5903336cfabc/go.mod h1:0xScojRCljjv6eR8CI+yenqdolyRK7h/1r0HQcgPKTM=
 github.com/getlantern/replica v0.15.0 h1:rq3PiaSJdDgZ8B/Xofa0Ff/b0QzGePqFe8/+bxg0Hx8=
 github.com/getlantern/replica v0.15.0/go.mod h1:COzUFTnbgKDgacbb3ZfbZoQcOeiwpie30Rcwn0RkjMY=
 github.com/getlantern/rot13 v0.0.0-20220822172233-370767b2f782 h1:A1+qM0Dqm0no8A5qvWoTCFKME9Sa67xsJ1fcV13PvEY=
@@ -619,8 +619,8 @@ github.com/kennygrant/sanitize v1.2.4/go.mod h1:LGsjYYtgxbetdg5owWB2mpgUL6e2nfw2
 github.com/kisielk/errcheck v1.1.0/go.mod h1:EZBBE59ingxPouuu3KfxchcWSUPOHkagtvWXihfKN4Q=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/klauspost/compress v1.4.1/go.mod h1:RyIbtBH6LamlWaDj8nUwkbUhJ87Yi3uG0guNDohfE1A=
-github.com/klauspost/compress v1.18.0 h1:c/Cqfb0r+Yi+JtIEq73FWXVkRonBlf0CRNYc8Zttxdo=
-github.com/klauspost/compress v1.18.0/go.mod h1:2Pp+KzxcywXVXMr50+X0Q/Lsb43OQHYWRCY2AiWywWQ=
+github.com/klauspost/compress v1.18.7 h1:aUyZsS4kH3QTKurYhAOwAHxllVPnOthb3vPfnF1Ehjw=
+github.com/klauspost/compress v1.18.7/go.mod h1:cwPg85FWrGar70rWktvGQj8/hthj3wpl0PGDogxkrSQ=
 github.com/klauspost/cpuid v1.2.0/go.mod h1:Pj4uuM528wm8OyEC2QMXAi2YiTZ96dNQPGgoMS4s3ek=
 github.com/klauspost/cpuid/v2 v2.0.9/go.mod h1:FInQzS24/EEf25PyTYn52gqo7WaD8xa0213Md/qVLRg=
 github.com/klauspost/cpuid/v2 v2.0.10/go.mod h1:g2LTdtYhdyuGPqyWyv7qRAmj1WBqxuObKfj5c0PQa7c=

@@ -8,8 +8,8 @@ require (
 	github.com/alexflint/go-arg v1.4.3
 	github.com/dustin/go-humanize v1.1.0
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
-	github.com/getlantern/broflake v0.0.0-20261027185621-f3e54408e4f0
-	github.com/getlantern/flashlight/v7 v7.6.244-0.20261029101001-251242e1c12e
+	github.com/getlantern/broflake v0.0.0-20261029103008-5dfefb75f7b5
+	github.com/getlantern/flashlight/v7 v7.6.244-0.20261029103048-8738547b9826
 	github.com/getlantern/fronted v0.0.0-20260220001536-2f158428bf15
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/kindling v0.0.0-20260219202502-df15c15dc5fb
@@ -137,7 +137,7 @@ require (
 	github.com/getlantern/preconn v1.0.0 // indirect
 	github.com/getlantern/proxy/v3 v3.0.0-20240328103708-9185589b6a99 // indirect
 	github.com/getlantern/psmux v1.5.15 // indirect
-	github.com/getlantern/quicwrapper v0.0.0-20261029095933-e47b3a308fa6 // indirect
+	github.com/getlantern/quicwrapper v0.0.0-20261029102957-5903336cfabc // indirect
 	github.com/getlantern/replica v0.15.0 // indirect
 	github.com/getlantern/rot13 v0.0.0-20220822172233-370767b2f782 // indirect
 	github.com/getlantern/shortcut v0.0.0-20211026183428-bf59a137fdec // indirect
@@ -172,7 +172,7 @@ require (
 	github.com/huandu/xstrings v1.5.0 // indirect
 	github.com/jaffee/commandeer v0.6.0 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
-	github.com/klauspost/compress v1.18.0 // indirect
+	github.com/klauspost/compress v1.18.7 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
 	github.com/klauspost/pgzip v1.2.6 // indirect
 	github.com/klauspost/reedsolomon v1.12.4 // indirect
