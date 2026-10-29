@@ -1,6 +1,8 @@
 package unbounded
 
 import (
+	"crypto/rand"
+	"crypto/sha256"
 	"fmt"
 	"net"
 	"sync"
@@ -13,18 +15,34 @@ import (
 // so they are atomic adds and nothing else. Directions are from this peer's
 // point of view as a relay: "to peers" is what it downloads from the egress
 // for a consumer, "from peers" is what it uploads for them.
+//
+// Peers are censored users, so their addresses are not kept: distinct peers
+// are counted by a hash salted per process, which identifies nobody once the
+// process exits.
 type stats struct {
 	bytesToPeers   atomic.Uint64
 	bytesFromPeers atomic.Uint64
 	connects       atomic.Uint64
 	active         atomic.Int64
 
+	salt [16]byte
 	mu   sync.Mutex
-	seen map[string]struct{}
+	seen map[[sha256.Size]byte]struct{}
 }
 
 func newStats() *stats {
-	return &stats{seen: make(map[string]struct{})}
+	s := &stats{seen: make(map[[sha256.Size]byte]struct{})}
+	_, _ = rand.Read(s.salt[:])
+	return s
+}
+
+func (s *stats) peerKey(addr net.IP) [sha256.Size]byte {
+	h := sha256.New()
+	h.Write(s.salt[:])
+	h.Write(addr)
+	var key [sha256.Size]byte
+	copy(key[:], h.Sum(nil))
+	return key
 }
 
 func (s *stats) onConnectionChange(state int, addr net.IP) {
@@ -33,8 +51,9 @@ func (s *stats) onConnectionChange(state int, addr net.IP) {
 		s.connects.Add(1)
 		s.active.Add(1)
 		if addr != nil {
+			key := s.peerKey(addr)
 			s.mu.Lock()
-			s.seen[addr.String()] = struct{}{}
+			s.seen[key] = struct{}{}
 			s.mu.Unlock()
 		}
 	case state < 0:

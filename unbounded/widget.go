@@ -169,9 +169,12 @@ func startEngine(cfg Config, st *stats, cap *capTracker, rtcNet transport.Net) (
 	bfOpt.Netstated = cfg.Netstated
 	bfOpt.OnConnectionChangeFunc = func(state, workerIdx int, addr net.IP) {
 		st.onConnectionChange(state, addr)
+		// The peer's address is a censored user's IP. It stays out of the
+		// service log unless debugging is on.
 		switch {
 		case state > 0:
-			slog.Info("peer connected", "slot", workerIdx, "addr", addrString(addr))
+			slog.Info("peer connected", "slot", workerIdx)
+			slog.Debug("peer address", "slot", workerIdx, "addr", addrString(addr))
 		case state < 0:
 			slog.Info("peer disconnected", "slot", workerIdx)
 		}
