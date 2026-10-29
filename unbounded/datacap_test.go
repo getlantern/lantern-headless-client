@@ -75,6 +75,31 @@ func TestCapTrackerExceedsAndRollsOver(t *testing.T) {
 	}
 }
 
+// An add that crossed the old period's cap but was preempted by Rollover
+// must not exhaust the new period.
+func TestCapTrackerRolloverBeatsLateMark(t *testing.T) {
+	now := time.Date(2026, 10, 29, 23, 59, 59, 0, time.Local)
+	clock := func() time.Time { return now }
+	c, err := newCapTracker(DataCap{Bytes: 100, Period: PeriodDay}, "", clock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// The add's atomic increment lands in the old period...
+	c.used.Add(100)
+	// ...Rollover runs before it can mark the period exceeded...
+	now = now.Add(time.Second)
+	if !c.Rollover() {
+		t.Fatal("expected rollover")
+	}
+	// ...and the late mark must find nothing to close.
+	c.markExceeded()
+	select {
+	case <-c.Exceeded():
+		t.Fatal("new period marked exceeded by an old-period add")
+	default:
+	}
+}
+
 func TestPeriodStart(t *testing.T) {
 	loc := time.FixedZone("CET", 3600)
 	wed := time.Date(2026, 10, 28, 20, 27, 0, 0, loc)

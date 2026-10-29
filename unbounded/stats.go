@@ -7,6 +7,7 @@ import (
 	"net"
 	"sync"
 	"sync/atomic"
+	"time"
 )
 
 // stats are the lifetime counters a volunteer wants to see: how much it has
@@ -24,6 +25,8 @@ type stats struct {
 	bytesFromPeers atomic.Uint64
 	connects       atomic.Uint64
 	active         atomic.Int64
+	// lastActivityNanos is when a callback last fired, for draining on stop.
+	lastActivityNanos atomic.Int64
 
 	salt [16]byte
 	mu   sync.Mutex
@@ -45,7 +48,21 @@ func (s *stats) peerKey(addr net.IP) [sha256.Size]byte {
 	return key
 }
 
+func (s *stats) touch() {
+	s.lastActivityNanos.Store(time.Now().UnixNano())
+}
+
+// lastActivity is when a callback last fired; the zero time if none has.
+func (s *stats) lastActivity() time.Time {
+	n := s.lastActivityNanos.Load()
+	if n == 0 {
+		return time.Time{}
+	}
+	return time.Unix(0, n)
+}
+
 func (s *stats) onConnectionChange(state int, addr net.IP) {
+	s.touch()
 	switch {
 	case state > 0:
 		s.connects.Add(1)
@@ -62,12 +79,14 @@ func (s *stats) onConnectionChange(state int, addr net.IP) {
 }
 
 func (s *stats) onDownstreamChunk(size int) {
+	s.touch()
 	if size > 0 {
 		s.bytesToPeers.Add(uint64(size))
 	}
 }
 
 func (s *stats) onUpstreamChunk(size int) {
+	s.touch()
 	if size > 0 {
 		s.bytesFromPeers.Add(uint64(size))
 	}

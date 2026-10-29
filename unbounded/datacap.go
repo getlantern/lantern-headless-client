@@ -113,13 +113,18 @@ func (c *capTracker) add(n int) {
 	}
 }
 
+// markExceeded closes the current period's channel if its budget really is
+// spent. An add that crossed the previous period's cap can be preempted by
+// Rollover, which resets the count; the re-check under mu keeps it from
+// closing the new period's channel.
 func (c *capTracker) markExceeded() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	if !c.closed {
-		close(c.exceeded)
-		c.closed = true
+	if c.closed || c.used.Load() < c.cap.Bytes {
+		return
 	}
+	close(c.exceeded)
+	c.closed = true
 }
 
 // Exceeded is closed once the current period's budget is spent.

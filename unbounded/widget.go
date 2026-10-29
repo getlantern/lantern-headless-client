@@ -98,7 +98,7 @@ func Run(ctx context.Context, cfg Config) error {
 		}
 		slog.Info("Serving: waiting for peers to help")
 
-		if serve(ctx, ui, cap) {
+		if serve(ctx, ui, st, cap) {
 			slog.Info("Unbounded volunteer peer stopped", st.snapshot().logAttrs()...)
 			return nil
 		}
@@ -108,7 +108,7 @@ func Run(ctx context.Context, cfg Config) error {
 
 // serve blocks until ctx is done (returns true) or the data cap is reached
 // (returns false). Either way the engine is stopped before returning.
-func serve(ctx context.Context, ui *clientcore.UIImpl, cap *capTracker) (done bool) {
+func serve(ctx context.Context, ui *clientcore.UIImpl, st *stats, cap *capTracker) (done bool) {
 	ticker := time.NewTicker(housekeepingInterval)
 	defer ticker.Stop()
 	for {
@@ -119,11 +119,16 @@ func serve(ctx context.Context, ui *clientcore.UIImpl, cap *capTracker) (done bo
 		select {
 		case <-ctx.Done():
 			slog.Info("Stopping Unbounded engine")
-			ui.Stop()
+			stopEngine(ui, st)
 			return true
 		case <-exceeded:
 			slog.Warn("Data cap reached, pausing", "used", humanBytes(cap.Used()))
-			ui.Stop()
+			stopEngine(ui, st)
+			// Save the spent budget now, so a crash during the pause does
+			// not restore spare budget from an earlier checkpoint.
+			if err := cap.persist(); err != nil {
+				slog.Warn("could not persist data cap usage", "error", err)
+			}
 			return false
 		case <-ticker.C:
 			if cap != nil {
@@ -135,6 +140,31 @@ func serve(ctx context.Context, ui *clientcore.UIImpl, cap *capTracker) (done bo
 				}
 			}
 		}
+	}
+}
+
+// engineStopGrace is how long broflake's engine waits for its workers before
+// cancelling its context; the upstream chunk handler delivers its last batch
+// at that cancellation. One second more covers the delivery itself.
+const engineStopGrace = 11 * time.Second
+
+// callbackQuiet is how long the chunk callbacks must stay silent after Stop
+// for the engine to count as drained.
+const callbackQuiet = 500 * time.Millisecond
+
+// stopEngine stops the engine and waits for its callbacks to drain, so the
+// bytes they report still reach the stats and the persisted cap. UIImpl.Stop
+// returns before the engine's context is cancelled and exposes no completion
+// signal, so the wait is for the callbacks to go quiet, bounded by the
+// engine's own stop grace.
+func stopEngine(ui *clientcore.UIImpl, st *stats) {
+	ui.Stop()
+	deadline := time.Now().Add(engineStopGrace)
+	for time.Now().Before(deadline) {
+		if time.Since(st.lastActivity()) >= callbackQuiet {
+			return
+		}
+		time.Sleep(50 * time.Millisecond)
 	}
 }
 

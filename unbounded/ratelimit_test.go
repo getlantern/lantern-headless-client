@@ -1,9 +1,13 @@
 package unbounded
 
 import (
+	"errors"
 	"net"
+	"os"
 	"testing"
 	"time"
+
+	"github.com/pion/transport/v5"
 )
 
 // Sending through a limited socket must take about the time the limit
@@ -72,5 +76,67 @@ func TestLimitedNetOversizedWriteIsNotBlocked(t *testing.T) {
 	case <-done:
 	case <-time.After(5 * time.Second):
 		t.Fatal("a datagram larger than the burst must not block forever")
+	}
+}
+
+// A write waiting on a spent bucket must return as soon as the socket is
+// closed or its write deadline passes, not when the tokens arrive.
+func TestLimitedNetWaitsAreInterruptible(t *testing.T) {
+	ln, err := NewLimitedNet(1000) // 1 KB/s: the 64 KiB burst takes a minute to refill
+	if err != nil {
+		t.Fatal(err)
+	}
+	sink, err := net.ListenUDP("udp4", &net.UDPAddr{IP: net.IPv4(127, 0, 0, 1)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer sink.Close()
+
+	// Spend the whole burst in datagrams a UDP socket accepts.
+	spend := func(c transport.UDPConn) {
+		t.Helper()
+		for sent := 0; sent < minBurst; sent += minBurst / 4 {
+			if _, err := c.WriteTo(make([]byte, minBurst/4), sink.LocalAddr()); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+
+	closed, err := ln.ListenUDP("udp4", &net.UDPAddr{IP: net.IPv4(127, 0, 0, 1)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	spend(closed)
+	done := make(chan error, 1)
+	go func() {
+		_, err := closed.WriteTo(make([]byte, 1024), sink.LocalAddr())
+		done <- err
+	}()
+	time.Sleep(100 * time.Millisecond)
+	closed.Close()
+	select {
+	case err := <-done:
+		if !errors.Is(err, net.ErrClosed) {
+			t.Fatalf("write after close returned %v, want net.ErrClosed", err)
+		}
+	case <-time.After(5 * time.Second):
+		t.Fatal("write kept waiting on the limiter after the socket was closed")
+	}
+
+	timed, err := ln.ListenUDP("udp4", &net.UDPAddr{IP: net.IPv4(127, 0, 0, 1)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer timed.Close()
+	if err := timed.SetWriteDeadline(time.Now().Add(200 * time.Millisecond)); err != nil {
+		t.Fatal(err)
+	}
+	start := time.Now()
+	_, err = timed.WriteTo(make([]byte, 1024), sink.LocalAddr())
+	if !errors.Is(err, os.ErrDeadlineExceeded) {
+		t.Fatalf("write past the deadline returned %v, want os.ErrDeadlineExceeded", err)
+	}
+	if time.Since(start) > 3*time.Second {
+		t.Fatal("deadline did not interrupt the limiter wait")
 	}
 }
