@@ -128,6 +128,11 @@ func stunMappedAddr(ctx context.Context, conn *net.UDPConn, server string, timeo
 		if resp.Decode() != nil {
 			continue
 		}
+		// Every request shares this socket, so a late reply from an earlier
+		// server must not be taken for this one's.
+		if resp.TransactionID != msg.TransactionID {
+			continue
+		}
 		var xor stun.XORMappedAddress
 		if xor.GetFrom(resp) != nil {
 			continue

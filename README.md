@@ -178,11 +178,12 @@ Every option is also an environment variable, which is how the service unit is c
 ### As a Linux service
 
 The packages install an opt-in systemd unit. It runs as an unprivileged dynamic user with its state in
-`/var/lib/lantern-unbounded`:
+`/var/lib/lantern-unbounded` and reads its settings from `/etc/lantern-headless/unbounded.env`:
 
 ```shell
 cp /etc/lantern-headless/unbounded.env.example /etc/lantern-headless/unbounded.env   # then edit the limits
-systemctl enable --now /etc/lantern-headless/lantern-unbounded.service
+systemctl enable --now /etc/lantern-headless/lantern-unbounded.service              # deb, rpm, apk
+systemctl enable --now lantern-unbounded.service                                     # Arch (AUR installs the unit system-wide)
 journalctl -u lantern-unbounded -f
 ```
 

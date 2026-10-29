@@ -7,7 +7,9 @@ Wants=network-online.target
 [Service]
 # UNBOUNDED_* variables configure the peer; see unbounded.env.example.
 EnvironmentFile=-/etc/lantern-headless/unbounded.env
-ExecStart=/usr/bin/lantern-headless --quiet --data-path /var/lib/lantern-unbounded unbounded
+# Not --quiet: the peer's log lines go to stderr, and so to the journal, as
+# well as to the log file in the state directory.
+ExecStart=/usr/bin/lantern-headless --data-path /var/lib/lantern-unbounded unbounded
 ExecStop=/bin/kill -s TERM $MAINPID
 Restart=always
 RestartSec=5
@@ -24,7 +26,8 @@ ProtectSystem=strict
 ProtectHome=yes
 ProtectKernelTunables=yes
 ProtectControlGroups=yes
-RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+# AF_NETLINK: pion enumerates interfaces for ICE candidates over netlink.
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK
 LockPersonality=yes
 
 [Install]
