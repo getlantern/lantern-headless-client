@@ -1,0 +1,34 @@
+[Unit]
+Description=Lantern Unbounded volunteer peer
+Documentation=https://github.com/getlantern/lantern-headless-client
+After=network-online.target nss-lookup.target
+Wants=network-online.target
+
+[Service]
+# UNBOUNDED_* variables configure the peer; see unbounded.env.example.
+EnvironmentFile=-/etc/lantern-headless/unbounded.env
+# Not --quiet: the peer's log lines go to stderr, and so to the journal, as
+# well as to the log file in the state directory.
+ExecStart=/usr/bin/lantern-headless --data-path /var/lib/lantern-unbounded unbounded
+ExecStop=/bin/kill -s TERM $MAINPID
+Restart=always
+RestartSec=5
+# Signaling and the first peers can take a while on a slow uplink.
+TimeoutStartSec=900
+
+# The peer needs no privileges, inbound ports or writable paths beyond its
+# state directory.
+DynamicUser=yes
+StateDirectory=lantern-unbounded
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+# AF_NETLINK: pion enumerates interfaces for ICE candidates over netlink.
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK
+LockPersonality=yes
+
+[Install]
+WantedBy=multi-user.target

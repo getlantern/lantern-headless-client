@@ -70,6 +70,10 @@ func main() {
 	case args.Serve != nil:
 		readAuth()
 		serve(args.Serve)
+	case args.Unbounded != nil:
+		code := runUnbounded(args.Unbounded, logWriter)
+		_ = logWriter.Close()
+		os.Exit(code)
 	default:
 		printHelp()
 	}

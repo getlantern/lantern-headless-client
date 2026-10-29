@@ -30,6 +30,19 @@ expect(){
 	fi
 }
 
+unbounded_unit="lantern-unbounded.service"
+
+# deb passes "upgrade"/"deconfigure"/"failed-upgrade" on upgrades and "remove"
+# on removal; rpm passes the number of versions that will remain (0 on
+# removal); apk and Arch pass nothing and only run this on removal.
+is_upgrade() {
+    case "${1:-}" in
+        upgrade|deconfigure|failed-upgrade) return 0 ;;
+        [1-9]*) return 0 ;;
+    esac
+    return 1
+}
+
 disable_service() {
   	info "disable service"
   	if command -v systemctl >/dev/null;then
@@ -44,10 +57,32 @@ disable_service() {
     succ "service disabled successfully"
 }
 
-
-clean_dirs() {
-    rm -rf ${root_dir}
+# The volunteer unit is opt-in; stop it if it is running so the host does
+# not keep relaying after the binary is gone.
+disable_unbounded_service() {
+    if command -v systemctl >/dev/null; then
+        systemctl stop "${unbounded_unit}" 2>/dev/null || true
+        systemctl disable "${unbounded_unit}" 2>/dev/null || true
+        succ "unbounded service stopped and disabled"
+    fi
 }
 
+# Remove only what the package installed. An operator's unbounded.env stays,
+# as package configuration does on removal; purge it by hand if unwanted.
+clean_dirs() {
+    rm -f "${root_dir}/${service_unit}" "${root_dir}/${sysvinit_script}" \
+          "${root_dir}/${unbounded_unit}" "${root_dir}/unbounded.env.example"
+    rmdir "${root_dir}" 2>/dev/null || true
+    if command -v systemctl >/dev/null; then
+        systemctl daemon-reload 2>/dev/null || true
+    fi
+}
+
+if is_upgrade "${1:-}"; then
+    info "upgrade in progress; leaving services and configuration in place"
+    exit 0
+fi
+
+disable_unbounded_service
 disable_service
 clean_dirs

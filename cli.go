@@ -37,8 +37,9 @@ type LogoutCmd struct {
 
 type Args struct {
 	// sub commands
-	Auth  *AuthCmd  `arg:"subcommand:auth" help:"Authenticate with Lantern"`
-	Serve *ServeCmd `arg:"subcommand:start" help:"Start Lantern"`
+	Auth      *AuthCmd      `arg:"subcommand:auth" help:"Authenticate with Lantern"`
+	Serve     *ServeCmd     `arg:"subcommand:start" help:"Start Lantern"`
+	Unbounded *UnboundedCmd `arg:"subcommand:unbounded" help:"Share your connection as an Unbounded volunteer peer"`
 
 	// common options
 	DataPath string `arg:"--data-path" help:"Path to store data (config, logs, etc)"`
