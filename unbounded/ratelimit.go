@@ -2,11 +2,9 @@ package unbounded
 
 import (
 	"context"
-	"errors"
 	"net"
 	"os"
 	"sync"
-	"syscall"
 	"time"
 
 	"github.com/pion/transport/v5"
@@ -92,6 +90,12 @@ func (n *limitedNet) ListenUDP(network string, laddr *net.UDPAddr) (transport.UD
 	c, err := n.Net.ListenUDP(network, laddr)
 	if err != nil {
 		return nil, err
+	}
+	if laddr != nil && laddr.IP.IsMulticast() {
+		// Only pion's mDNS listens on a multicast address, and x/net, which
+		// it reads that socket through, accepts only a *net.UDPConn. Its
+		// traffic is a few small packets, so it goes unlimited.
+		return c, nil
 	}
 	return &limitedUDPConn{UDPConn: c, limits: newConnLimits(n.tx, n.rx)}, nil
 }
@@ -277,18 +281,6 @@ func (l *connLimits) tookRx(n int) {
 type limitedUDPConn struct {
 	transport.UDPConn
 	limits *connLimits
-}
-
-// SyscallConn exposes the socket's raw connection, which pion's mDNS needs to
-// join its multicast group: x/net only accepts sockets that offer it. I/O
-// through the raw connection bypasses the limit, which pion only does for
-// mDNS.
-func (c *limitedUDPConn) SyscallConn() (syscall.RawConn, error) {
-	sc, ok := c.UDPConn.(syscall.Conn)
-	if !ok {
-		return nil, errors.New("unbounded: socket has no raw connection")
-	}
-	return sc.SyscallConn()
 }
 
 func (c *limitedUDPConn) Close() error {

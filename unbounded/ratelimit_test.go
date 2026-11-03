@@ -11,7 +11,6 @@ import (
 
 	"github.com/pion/transport/v5"
 	"github.com/pion/transport/v5/stdnet"
-	"golang.org/x/net/ipv4"
 )
 
 // Sending through a limited socket must take about the time the limit
@@ -447,19 +446,27 @@ func TestLimitedNetInterruptedReadKeepsTheDatagram(t *testing.T) {
 	}
 }
 
-// A limited socket offers its raw connection, so x/net can set socket options
-// on it, as pion's mDNS does to join its multicast group.
-func TestLimitedNetSocketsAcceptSocketOptions(t *testing.T) {
+// A socket on a multicast address, which only pion's mDNS opens, is the host's
+// own: x/net reads it only as a *net.UDPConn. Every other socket is limited.
+func TestLimitedNetLeavesMulticastSocketsUnwrapped(t *testing.T) {
 	ln, err := NewLimitedNet(64 * 1024)
 	if err != nil {
 		t.Fatal(err)
 	}
-	c, err := ln.ListenUDP("udp4", &net.UDPAddr{IP: net.IPv4zero})
+	mdns, err := ln.ListenUDP("udp4", &net.UDPAddr{IP: net.IPv4(224, 0, 0, 251)})
+	if err != nil {
+		t.Skipf("can't listen on a multicast address here: %v", err)
+	}
+	defer mdns.Close()
+	if _, ok := mdns.(*net.UDPConn); !ok {
+		t.Fatalf("multicast socket is %T, want *net.UDPConn", mdns)
+	}
+	unicast, err := ln.ListenUDP("udp4", &net.UDPAddr{IP: net.IPv4(127, 0, 0, 1)})
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer c.Close()
-	if err := ipv4.NewPacketConn(c).SetMulticastTTL(1); err != nil {
-		t.Fatalf("setting a multicast option on a limited socket: %v", err)
+	defer unicast.Close()
+	if _, ok := unicast.(*limitedUDPConn); !ok {
+		t.Fatalf("unicast socket is %T, want it limited", unicast)
 	}
 }
