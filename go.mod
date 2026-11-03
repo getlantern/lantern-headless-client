@@ -19,6 +19,7 @@ require (
 	github.com/pterm/pterm v0.12.80
 	github.com/stretchr/testify v1.12.1
 	golang.org/x/crypto v0.54.0
+	golang.org/x/net v0.56.0
 	golang.org/x/sys v0.47.0
 	golang.org/x/time v0.16.0
 	google.golang.org/protobuf v1.36.11
@@ -267,7 +268,6 @@ require (
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/mod v0.37.0 // indirect
-	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/term v0.45.0 // indirect
 	golang.org/x/text v0.40.0 // indirect
